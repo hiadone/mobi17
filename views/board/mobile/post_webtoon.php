@@ -75,9 +75,10 @@ foreach (element(0, $menu) as $mkey => $mval) {
                 if (element('link_count', $view) > 0) {
                     $i=0;
                     foreach (element('link', $view) as $key => $value) {
+                        
                 ?>
                     <div>
-                        <a href="<?php echo element('link_link', $value); ?>" target="_blank"><img style="width:100%" src="<?php echo html_escape(element('pln_url', $value)); ?>" alt="webtoon_<?=$i?>" class="imgUrlExist" data-url="/img_url_header.php?url=<?php echo urlencode(element('pln_url', $value))?>&filename=<?php echo 'webyoon_'.$key ?>"></a>
+                        <a href="<?php echo element('link_link', $value); ?>" target="_blank"><img style="width:100%" src="<?php echo html_escape(element('pln_url', $value)); ?>" alt="webtoon_<?=$i?>" class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element('pln_url', $value))?>&filename=<?php echo 'webyoon_'.$key ?>"></a>
                     </div>
                 <?php
                     $i++;

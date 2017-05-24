@@ -104,6 +104,7 @@ class Banner extends CB_Controller
         $list_num = $result['total_rows'] - ($page - 1) * $per_page;
         if (element('list', $result)) {
             foreach (element('list', $result) as $key => $val) {
+                
                 if (element('ban_image', $val)) {
                     $result['list'][$key]['thumb_url'] = thumb_url('banner', element('ban_image', $val), '80');
                 }
@@ -231,7 +232,7 @@ class Banner extends CB_Controller
             array(
                 'field' => 'ban_url',
                 'label' => '이미지 URL',
-                'rules' => 'trim|valid_url',
+                'rules' => 'trim|required',
             ),
             array(
                 'field' => 'ban_target',

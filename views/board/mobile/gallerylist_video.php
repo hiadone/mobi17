@@ -226,7 +226,7 @@ $(document).ready(function() {
             <li>
                 <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
                 
-                <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element('origin_image_url', $result); ?>" alt="<?php echo 'video_'.$i ?>" title="<?php echo 'video_'.$i ?>"  class="imgUrlExist" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></h3></a>
+                <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element('origin_image_url', $result); ?>" alt="<?php echo 'video_'.$i ?>" title="<?php echo 'video_'.$i ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></h3></a>
             </li>
         <?php 
         $i++;

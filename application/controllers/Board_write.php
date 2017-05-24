@@ -36,7 +36,7 @@ class Board_write extends CB_Controller
          */
         $this->load->library(array('querystring', 'accesslevel', 'email', 'notelib', 'point', 'imagelib'));
 
-        $this->use_file_storage= $this->cbconfig->item('use_file_storage');
+        $this->use_file_storage= config_item('use_file_storage');
     }
 
 
@@ -441,7 +441,7 @@ class Board_write extends CB_Controller
 
                 $filecount = count($_FILES['post_file']['name']);
                 $upload_path = config_item('uploads_dir') . '/post/';
-                if($this->use_file_storage=='S3'){
+                if($this->use_file_storage==='S3'){
                     $upload_path .= cdate('Y') . '/';
                     $upload_path .= cdate('m') . '/';
                 } else {
@@ -1417,7 +1417,7 @@ class Board_write extends CB_Controller
         $uploadfiledata2 = '';
         if ($use_upload === true && $form_validation && element('use_upload_file', $board)) {
             $this->load->library('upload');
-            if($this->use_file_storage=='S3'){
+            if($this->use_file_storage==='S3'){
 
                 if (isset($_FILES) && isset($_FILES['post_file']) && isset($_FILES['post_file']['name']) && is_array($_FILES['post_file']['name'])) {
                     $filecount = count($_FILES['post_file']['name']);

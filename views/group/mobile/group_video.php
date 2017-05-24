@@ -3,14 +3,14 @@
 $section_contents[3]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_02"> </a> 
+  '.banner('video_banner_1').'
 </section>
 ';
 
 $section_contents[5]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> 
+  '.banner('video_banner_2').'
 </section>
 ';
 
@@ -18,7 +18,7 @@ $section_contents[5]='<!-- 광고 영역 -->
 $section_contents[7]='<!-- 무료공개 이벤트 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_02"> </a> 
+  '.banner('video_banner_3').'
 </section>';
 
 echo '<div class="wrap02">';

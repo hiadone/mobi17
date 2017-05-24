@@ -39,7 +39,7 @@ class Board_post extends CB_Controller
          */
         $this->load->library(array('pagination', 'querystring', 'accesslevel', 'videoplayer', 'point'));
 
-        $this->use_file_storage= $this->cbconfig->item('use_file_storage');
+        $this->use_file_storage= config_item('use_file_storage');
     }
 
 
@@ -48,6 +48,7 @@ class Board_post extends CB_Controller
      */
     public function lists($brd_key = '')
     {
+
         // 이벤트 라이브러리를 로딩합니다
         $eventname = 'event_board_post_lists';
         $this->load->event($eventname);
@@ -446,7 +447,7 @@ class Board_post extends CB_Controller
 
             if ($file && is_array($file)) {
                 foreach ($file as $key => $value) {
-                    if($this->use_file_storage == "S3"){
+                    if($this->use_file_storage === "S3"){
                         if (false) {
                             $value['origin_image_url'] = $this->config->config['s3_url'] .config_item('uploads_dir'). '/post/' . element('pfi_filename', $value);
 
@@ -1102,8 +1103,16 @@ class Board_post extends CB_Controller
         if (empty($category_id) OR $category_id < 1) {
             $category_id = '';
         }
+
+        $groupby='';
+        $category_type = (int) $this->input->get('category_type');
+        if (!empty($category_type) || $category_type > 0) {
+            $groupby = 'post.post_category';
+            $findex = 'board_category.bca_order';
+        }
+
         $result = $this->Post_model
-            ->get_post_list($per_page, $offset, $where, $category_id, $findex, $sfield, $skeyword);
+            ->get_post_list($per_page, $offset, $where, $category_id, $findex, $sfield, $skeyword,'', $groupby);
         $list_num = $result['total_rows'] - ($page - 1) * $per_page;
         if (element('list', $result)) {
             foreach (element('list', $result) as $key => $val) {
@@ -1186,7 +1195,7 @@ class Board_post extends CB_Controller
                 $result['list'][$key]['origin_image_url'] = '';
 
                 if (element('use_gallery_list', $board)) {
-                    if($this->cbconfig->item('use_file_storage') == "S3"){
+                    if($this->use_file_storage === "S3"){
                         if (element('post_image', $val)) {
                             
                             $filewhere = array(

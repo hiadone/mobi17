@@ -105,7 +105,7 @@ class Post extends CB_Controller
                 if (element('post_category', $val)) {
                     $result['list'][$key]['category'] = $this->Board_category_model->get_category_info(element('brd_id', $val), element('post_category', $val));
                 }
-                if($this->cbconfig->item('use_file_storage') == "S3"){
+                if(config_item('use_file_storage') === "S3"){
                     if (element('post_image', $val)) {
                         $imagewhere = array(
                             'post_id' => element('post_id', $val),

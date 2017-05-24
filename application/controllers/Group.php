@@ -76,7 +76,7 @@ class Group extends CB_Controller
         }
 
         $view['view']['board_list'] = $board_list;
-
+        
         $view['view']['canonical'] = group_url($bgr_key);
 
         // 이벤트가 존재하면 실행합니다

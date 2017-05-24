@@ -5,7 +5,7 @@
        echo  html_escape(element('board_name', element('board', $view)));
     ?> 
     <span> <a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>" title="<?php echo html_escape(element('board_name', element('board', $view))); ?>">
-    <?php if(element('sectionId', $view) != 'menu01') echo '더보기 >' ?>
+    더보기 >
     </a> </span> 
     </h2>
         <nav>
@@ -22,7 +22,7 @@
                     if(element('pfi_url', $value)){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="photo_'.$i.'">';
                     } elseif (element('pln_url', $value)) { 
-                        echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'" data-urltype="'.element('href_url', $view).'" class="imgUrlExist" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=photo_'.$i.'">';
+                        echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'" data-urltype="'.element('href_url', $view).'" class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=photo_'.$i.'">';
                     }
                     ?>
                     </a>

@@ -23,7 +23,7 @@
                     if(element('pfi_url', $value)){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="photo_'.$i.'">';
                     } elseif (element('pln_url', $value)) { 
-                        echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'" class="imgUrlExist" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=photo_'.$i.'">';
+                        echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'" data-urltype="'.element('href_url', $view).'" class="imgUrlExist" id="photo_'.$i.'" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=photo_'.$i.'" onerror="imgUrlChangeTry(this)">';
                     }
                     ?>
                     </a>

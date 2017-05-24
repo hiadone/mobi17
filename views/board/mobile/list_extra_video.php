@@ -22,7 +22,7 @@ if (element('list', element('data', element('list', $view)))) {
             }
             ?>
             " title="<?php echo html_escape(element('title', $result)); ?>">
-            <img src="<?php echo element('origin_image_url', $result); ?>" alt="<?php echo 'video_'.$key ?>" title="<?php echo 'video_'.$key ?>"  class="imgUrlExist" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$key ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></h3></a>
+            <img src="<?php echo element('origin_image_url', $result); ?>" alt="<?php echo 'video_'.$key ?>" title="<?php echo 'video_'.$key ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$key ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></h3></a>
         </li>
         <?php
     }

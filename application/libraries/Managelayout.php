@@ -20,7 +20,6 @@ class Managelayout extends CI_Controller
 
     function __construct()
     {   
-        $this->css=array(base_url('assets/mobi/css/import.css'));
         //$this->css=array(base_url('assets/mobi/css/import.css'));
     }
 

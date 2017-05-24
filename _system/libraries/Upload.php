@@ -401,7 +401,7 @@ class CI_Upload {
             return FALSE;
         }
 
-        if($this->_CI->cbconfig->item('use_file_storage') != "S3"){
+        if(config_item('use_file_storage') !== 'S3' || $field!=='userfile'){
             // Is the upload path valid?
             if ( ! $this->validate_upload_path())
             {
@@ -409,6 +409,7 @@ class CI_Upload {
                 return FALSE;
             }
         }
+
         // Was the file able to be uploaded? If not, determine the reason why.
         if ( ! is_uploaded_file($_file['tmp_name']))
         {
@@ -564,8 +565,9 @@ class CI_Upload {
          * we'll use move_uploaded_file(). One of the two should
          * reliably work in most environments
          */
+        
 
-        if($this->_CI->cbconfig->item('use_file_storage') == "S3"){
+        if(config_item('use_file_storage') === "S3" && $field==='userfile'){
              
             $this->_CI->aws->putObject($this->upload_path.$this->file_name,$this->file_temp);
 
@@ -577,7 +579,6 @@ class CI_Upload {
                 }
             }
         }
-        
 
         /*
          * Set the finalized image dimensions

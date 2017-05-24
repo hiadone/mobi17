@@ -20,29 +20,28 @@ if(element('css', $view) =='imglist'){
 
             echo "<h2>".html_escape(element('board_name', element('board', $view)));
          ?>
-       <span><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>" title="<?php echo html_escape(element('board_name', element('board', $view))); ?>">더보기 ></a></span></h2> 
+       <span><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>?category_type=1" title="<?php echo html_escape(element('board_name', element('board', $view))); ?>">더보기 ></a></span></h2> 
         <?php } ?>
        <nav>
             <ul>
             <?php
-            
+
             if (element('latest', $view)) {
                 foreach (element('latest', $view) as $key => $value) {
-                    //print_r($value);
-                    
+                 
 
                 if($key==0 && element('css', $view) =='imglist') continue;
             ?>
-                <li><a href="<?php echo element(element('href_url', $view), $value); ?>" title="<?php echo html_escape(element('title', $value)); ?>">
+                <li><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $value)); ?>" title="<?php echo html_escape(element('bca_value',element('category', $value))); ?>">
                     <?php 
                     if(element('pfi_url', $value) && element('css', $view) !='novel'){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="webtoon_'.$i.'">';
                     } elseif (element('pln_url', $value)&& element('css', $view) !='novel') { 
-                        echo '<img src="'.html_escape(element('pln_url', $value)).'" class="imgUrlExist" data-urltype="'.element('href_url', $view).'" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=webtoon_'.$i.'" alt="webtoon_'.$i.'">';
+                        echo '<img src="'.html_escape(element('pln_url', $value)).'" class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-urltype="'.element('href_url', $view).'" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=webtoon_'.$i.'" alt="webtoon_'.$i.'">';
                     }
                     ?>
                     
-                    <h3> <?php echo element('title', $value) ? html_escape(element('title', $value)) :'';?>
+                    <h3> <?php echo element('bca_value',element('category', $value)) ? html_escape(element('bca_value',element('category', $value))) :'';?>
                         <?php if(element('css', $view) =='best') {
                             echo '<br/><span> E-BOOK종류 : 19금 소설<br/>등록일 : '.element('display_datetime', $value).'</span> ';
                         }?>
@@ -50,6 +49,7 @@ if(element('css', $view) =='imglist'){
                 </li>
             <?php
                     $i++;
+                   
                 }
             }
             while ($i < element('latest_limit', $view)) {

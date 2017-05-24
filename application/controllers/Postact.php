@@ -36,7 +36,7 @@ class Postact extends CB_Controller
          */
         $this->load->library(array('querystring', 'accesslevel', 'email', 'notelib', 'point'));
 
-        $this->use_file_storage= $this->cbconfig->item('use_file_storage');
+        $this->use_file_storage= config_item('use_file_storage');
 
     }
     /**

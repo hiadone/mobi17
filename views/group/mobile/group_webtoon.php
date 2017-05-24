@@ -3,21 +3,21 @@
 $section_contents[2]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> 
+  '.banner('webtoon_banner_1').'
 </section>
 ';
 
 $section_contents[4]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> 
+  '.banner('webtoon_banner_2').'
 </section>
 ';
 
 $section_contents[6]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> 
+  '.banner('webtoon_banner_3').'
 </section>
 ';
 
@@ -51,6 +51,8 @@ if (element('board_list', $view)) {
             'css' => $css,
             'href_url' => $href_url,
             'sectionId' => 'menu'.sprintf("%02d", $i),
+            'findex' => 'board_category.bca_order',
+            'forder' => 'ASC',
         );
         echo $this->board->latest($config);
         if(array_key_exists($i,$section_contents)) echo $section_contents[$i];

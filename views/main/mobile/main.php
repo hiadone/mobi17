@@ -74,9 +74,7 @@ section.slide ul li:nth-child(n+2){display:none;}
 <section class="slide">
   <h4>슬라이드 영역</h4>
   <ul >
-    <li> <a href="https://www.tumblr.com/video/realsoccer1/139345588396/700"><img src="https://s3.ap-northeast-2.amazonaws.com/hiadone/uploads/manual/main_01.png" alt="main_01"  /></a> </li>
-    <li> <a href="https://www.tumblr.com/video/floydianpr0n/140155168860/700"><img src="https://s3.ap-northeast-2.amazonaws.com/hiadone/uploads/manual/main_02.png" alt="main_02"  /></a> </li>
-    <li> <a href="https://www.tumblr.com/video/laughing-camera/141479256894/700"><img src="https://s3.ap-northeast-2.amazonaws.com/hiadone/uploads/manual/main_03.png" alt="main_03"  /></a> </li>
+    <?php echo banner('main_bxslider_1','order',3,'<li>','</li>'); ?>
   </ul>
   <div class="newPager"></div>
   <div class="newAutoControl"></div>
@@ -92,39 +90,39 @@ section.slide ul li:nth-child(n+2){display:none;}
 $section_contents[1]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_02"> </a> 
+  '.banner('main_banner_1').'
 </section>
 <!--최신영상 영역-->
 <section class="vod" >
   <h2>최신영상 <span><a href="'.base_url('group/video').'">더보기 ></a></span> </h2>
   <nav>
     <ul>
-      <li> <a href="/post/636"> <img src="'.base_url('assets/mobi/images/mmain/a1.jpg').'" alt="new_vod01">
-        <h3>검스신고 팬티안에 강제로<br/>
+      <li> <a href="/post/636"> <img src="'.base_url('assets/mobi/images/mmain/a1.jpg1').'" alt="new_vod01">
+        <h3>?<br/>
           <span> 동영상종류 : 동양<br/>
           등록일 : 2017 . 01 . 20 </span> </h3>
         <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
         </a> </li>
-      <li> <a href="/post/635"> <img src="'.base_url('assets/mobi/images/mmain/a2.jpg').'" alt="new_vod02">
-        <h3>검스 신고 아파하는 그녀<br/>
+      <li> <a href="/post/635"> <img src="'.base_url('assets/mobi/images/mmain/a2.jpg1').'" alt="new_vod02">
+        <h3>?<br/>
           <span> 동영상종류 : 동양<br/>
           등록일 : 2017 . 01 . 20 </span> </h3>
         <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
         </a> </li>
-      <li> <a href="/post/637"> <img src="'.base_url('assets/mobi/images/mmain/a3.jpg').'" alt="new_vod03">
-        <h3>격렬하게 자위하다가 줄줄<br/>
+      <li> <a href="/post/637"> <img src="'.base_url('assets/mobi/images/mmain/a3.jpg1').'" alt="new_vod03">
+        <h3>?<br/>
           <span> 동영상종류 :  페티쉬<br/>
           등록일 : 2017 . 01 . 20 </span> </h3>
         <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
         </a> </li>
-      <li> <a href="/post/638"> <img src="'.base_url('assets/mobi/images/mmain/a4.jpg').'" alt="new_vod04">
-        <h3>청수하게 생긴 그녀 야하게<br/>
+      <li> <a href="/post/638"> <img src="'.base_url('assets/mobi/images/mmain/a4.jpg1').'" alt="new_vod04">
+        <h3>?<br/>
           <span> 동영상종류 : 일본<br/>
           등록일 : 2017 . 01 . 20 </span> </h3>
         <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
         </a> </li>
-      <li> <a href="/post/639"> <img src="'.base_url('assets/mobi/images/mmain/a9.jpg').'" alt="new_vod05">
-        <h3>로리로리 예쁜 요정녀<br/>
+      <li> <a href="/post/639"> <img src="'.base_url('assets/mobi/images/mmain/a9.jpg1').'" alt="new_vod05">
+        <h3>?녀<br/>
           <span> 동영상종류 : 서양<br/>
           등록일 : 2017 . 01 . 20 </span> </h3>
         <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
@@ -137,13 +135,14 @@ $section_contents[1]='<!-- 광고 영역 -->
 $section_contents[2]='<!-- 무료공개 이벤트 영역 -->
 <section class="event">
   <h2>무료공개 & 이벤트</h2>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_02"> </a> 
+  '.banner('main_banner_2').'
 </section>';
 
 $i=0;
 
 if (element('board_list', $view)) {
     foreach (element('board_list', $view) as $key => $board) {
+
         $limit=5;
         $css='swip_menu';
         $href_url='url';

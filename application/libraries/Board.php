@@ -490,7 +490,7 @@ class Board extends CI_Controller
         $brd_key = element('brd_key', $config);
         $exclude_brd_id = element('exclude_brd_id', $config);
         $exclude_brd_key = element('exclude_brd_key', $config);
-        $findex = element('findex', $config) ? element('findex', $config) : 'post_id';
+        $findex = element('findex', $config) ? element('findex', $config) : 'post.post_id';
         $forder = element('forder', $config) ? element('forder', $config) : 'DESC';
         $limit = element('limit', $config);
         $length = element('length', $config);
@@ -499,6 +499,7 @@ class Board extends CI_Controller
         $image_height = element('image_height', $config);
         $period_second = element('period_second', $config);
         $cache_minute = element('cache_minute', $config);
+
 
         if ($limit <= 0) {
             return false;
@@ -542,6 +543,7 @@ class Board extends CI_Controller
         if ($brd_id && ! is_array($brd_id)) {
             $view['view']['board'] = $this->CI->board->item_all($brd_id);
         }
+        $use_category = element('use_category', $view['view']['board']);
         $where = array();
         $where['post_del'] = 0;
         $where['post_secret'] = 0;
@@ -549,31 +551,35 @@ class Board extends CI_Controller
         $this->CI->db->from('post');
         $this->CI->db->where($where);
 
+        if($use_category){
+            $this->CI->db->join('board_category', 'post.post_category = board_category.bca_key and post.brd_id = board_category.brd_id', 'left');
+            $this->CI->db->group_by('post.post_category');
+        }
         if ($brd_id) {
             if (is_array($brd_id)) {
                 $this->CI->db->group_start();
                 foreach ($brd_id as $v) {
-                    $this->CI->db->or_where('brd_id', $v);
+                    $this->CI->db->or_where('post.brd_id', $v);
                 }
                 $this->CI->db->group_end();
             } else {
-                $this->CI->db->where('brd_id', $brd_id);
+                $this->CI->db->where('post.brd_id', $brd_id);
             }
         }
 
         if ($exclude_brd_id) {
             if (is_array($exclude_brd_id)) {
                 foreach ($exclude_brd_id as $v) {
-                    $this->CI->db->where('brd_id <>', $v);
+                    $this->CI->db->where('post.brd_id <>', $v);
                 }
             } else {
-                $this->CI->db->where('brd_id <>', $exclude_brd_id);
+                $this->CI->db->where('post.brd_id <>', $exclude_brd_id);
             }
         }
 
         if ($period_second) {
             $post_start_datetime = cdate('Y-m-d H:i:s', ctimestamp() - $period_second);
-            $this->CI->db->where('post_datetime >=', $post_start_datetime);
+            $this->CI->db->where('post.post_datetime >=', $post_start_datetime);
         }
 
         if ($findex && $forder) {
@@ -648,6 +654,7 @@ class Board extends CI_Controller
                 if (element('post_category', $value)) {
                         $view['view']['latest'][$key]['category'] = $this->CI->Board_category_model->get_category_info(element('brd_id', $value), element('post_category', $value));
                 }
+
                 if ($is_gallery) {
                     if (element('post_image', $value)) {
                         $imagewhere = array(

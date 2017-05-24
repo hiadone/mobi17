@@ -930,47 +930,61 @@ if (typeof(COMMON_JS) === 'undefined') {
     }
 
     var imgUrlExist=new Array();
-    var imgUrlChangeResults = new Array();
-    var imgUrlFlg;
-    $(document).ready(function(){
-        $('.imgUrlExist').error(function(){
+ //    var imgUrlChangeResults = new Array();
+ //    var imgUrlFlg;
+ //    $(document).ready(function(){
+ //        $('.imgUrlExist').on("error",function(){
            
-            var imgUrl="";            
-        if (!imgUrlExist[$(this).data('url')]) imgUrlExist[$(this).data('url')] = 1;
-        else imgUrlExist[$(this).data('url')] = imgUrlExist[$(this).data('url')] + 1;
+ //            var imgUrl="";            
+ //        if (!imgUrlExist[$(this).data('url')]) imgUrlExist[$(this).data('url')] = 1;
+ //        else imgUrlExist[$(this).data('url')] = imgUrlExist[$(this).data('url')] + 1;
+        
+ //         //   imgUrlExist.forEach(imgUrlChangeTry);
+        
+ //            if(imgUrlExist[$(this).data('url')] <2){
+ //                imgUrl = $(this).data('url');
+ //                if($(this).data('urltype')=="pln_url") $(this).parent('a').attr('href',imgUrl);
+ //                $(this).attr('src',imgUrl);                
+ //                console.log(imgUrlExist[$(this).data('url')]);
+ //            } else{
+ // console.log('noimg');
+ //                imgUrl = "/uploads/noimage.gif";
+ //                $(this).parent('a').attr('href',imgUrl);
+ //                $(this).attr('src',imgUrl);
+
+ //            }
+            
+            
+ //        });
+
+ //    });
+
+
+    function imgUrlChangeTry(element) {
+        
+        var imgUrl="";            
+        if (!imgUrlExist[$(element).data('url')]) imgUrlExist[$(element).data('url')] = 1;
+        else imgUrlExist[$(element).data('url')] = imgUrlExist[$(element).data('url')] + 1;
         
          //   imgUrlExist.forEach(imgUrlChangeTry);
-        
-            if(imgUrlExist[$(this).data('url')] <15){
-                imgUrl = $(this).data('url');
-                if($(this).data('urltype')=="pln_url") $(this).parent('a').attr('href',imgUrl);
-                $(this).attr('src',imgUrl);                
-                console.log(imgUrlExist[$(this).data('url')]);
+                
+            if(imgUrlExist[$(element).data('url')] <15){
+                imgUrl = $(element).data('url');
+                 
+                if($(element).data('urltype')=="pln_url") $(element).parent('a').attr('href',imgUrl);
+                $(element).attr('src',imgUrl);
+                console.log($(element).data('url'));
+                
+                setTimeout(function(){
+                    if(!$(element).width() > 0 ) imgUrlChangeTry(element);
+                }, 200);
             } else{
- console.log('noimg');
+ 
                 imgUrl = "/uploads/noimage.gif";
-                $(this).parent('a').attr('href',imgUrl);
-                $(this).attr('src',imgUrl);
+                $(element).parent('a').attr('href',imgUrl);
+                $(element).attr('src',imgUrl);
 
             }
-            
-            
-        });
-
-    });
-
-
-    function imgUrlChangeTry(value, index) {
-        imgUrlFlg=false;
-      if (!imgUrlChangeResults[value]) {        
-        imgUrlChangeResults[value] = 1;
-        imgUrlFlg=true;
-      } else if(imgUrlChangeResults[value] < 5) {
-        imgUrlChangeResults[value] = imgUrlChangeResults[value] + 1;
-        imgUrlFlg=true;
-      } 
-        
-      return imgUrlFlg;
     }
 
 

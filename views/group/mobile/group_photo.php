@@ -44,7 +44,7 @@ $(document).ready(function() {
 $section_contents[2]='<!-- 광고 영역 -->
 <section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> 
+  '.banner('photo_banner_1').'
 </section>
 ';
 echo '<div class="wrap02">';
@@ -81,5 +81,5 @@ if (element('board_list', $view)) {
 }
 echo '<section class="bigbanner">
   <h4>광고영역</h4>
-  <a href="#"> <img src="'.base_url('assets/mobi/images/ad_02.png').'" alt="ad_01"> </a> </section>';
-echo '</div>';
+  '.banner('photo_banner_2').'
+    </div>';

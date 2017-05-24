@@ -188,7 +188,7 @@ $(document).ready(function(){
         ?>  
 
             <div style="height:30px;">
-                <div class="title" style='CLEAR:BOTH;'>링크 #<?php echo $i+1; ?></div>
+                <div class="title" style='CLEAR:BOTH;'>링크#<?php echo $i+1; ?></div>
                 <div class="search"   >
                     <input type="text" class="input per95" name="<?php echo $link_column; ?>" value="<?php echo set_value($link_column, $link); ?>" />
                 </div>

@@ -40,7 +40,7 @@ class Post_model extends CB_Model
     /**
      * List 페이지 커스테마이징 함수
      */
-    public function get_post_list($limit = '', $offset = '', $where = '', $category_id = '', $orderby = '', $sfield = '', $skeyword = '', $sop = 'OR')
+    public function get_post_list($limit = '', $offset = '', $where = '', $category_id = '', $orderby = '', $sfield = '', $skeyword = '', $sop = 'OR',$groupby='')
     {
         if ( ! in_array(strtolower($orderby), $this->allow_order)) {
             $orderby = 'post_num, post_reply';
@@ -132,8 +132,8 @@ class Post_model extends CB_Model
             }
             $this->db->group_end();
         }
-
         $this->db->order_by($orderby);
+        $this->db->group_by($groupby);
         if ($limit) {
             $this->db->limit($limit, $offset);
         }

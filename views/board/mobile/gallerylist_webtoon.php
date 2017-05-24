@@ -50,8 +50,44 @@ $(document).ready(function() {
 
 <div class="wrap02">
     <section class="list_03 webtoon">
-    
-    <h2><?php echo html_escape(element('board_name', element('board', element('list', $view)))); ?><span><a href="<?php echo $men_link ?>"> X</a></span></h2>
+
+    <?php if(!empty($this->input->get('category_type'))){ ?>
+    <h2><?php echo html_escape(element('board_name', element('board', element('list', $view)))); ?>
+    <?php } else { ?>
+    <h2><?php echo html_escape(element('bca_value', element('category',element(0, element('list', element('data', element('list', $view))))))); ?>
+    <?php if (element('use_category', element('board', element('list', $view))) ) { ?>
+            <select class="input" onchange="location.href='<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=' + this.value;">
+                <option value="">카테고리선택</option>
+                <?php
+                $category = element('category', element('board', element('list', $view)));
+                function ca_select($p = '', $category = '', $category_id = '')
+                {
+                    $return = '';
+                    if ($p && is_array($p)) {
+                        foreach ($p as $result) {
+                            $exp = explode('.', element('bca_key', $result));
+                            $len = (element(1, $exp)) ? strlen(element(1, $exp)) : '0';
+                            $space = str_repeat('-', $len);
+                            $return .= '<option value="' . html_escape(element('bca_key', $result)) . '"';
+                            if (element('bca_key', $result) === $category_id) {
+                                $return .= 'selected="selected"';
+                            }
+                            $return .= '>' . $space . html_escape(element('bca_value', $result)) . '</option>';
+                            $parent = element('bca_key', $result);
+                            $return .= ca_select(element($parent, $category), $category, $category_id);
+                        }
+                    }
+                    return $return;
+                }
+
+                echo ca_select(element(0, $category), $category, $this->input->get('category_id'));
+                ?>
+            </select>
+        <?php } ?>
+    <?php } ?>
+
+    <span><a href="<?php echo $men_link ?>"> X</a></span>
+    </h2>
     <nav>
     <ul>
     <div class="table-top hide">
@@ -152,24 +188,6 @@ $(document).ready(function() {
     </div>
     </ul>
     <?php
-    if (element('use_category', element('board', element('list', $view))) && element('cat_display_style', element('board', element('list', $view))) === 'tab') {
-        $category = element('category', element('board', element('list', $view)));
-    ?>
-        <ul class="nav nav-tabs clearfix">
-            <li role="presentation" <?php if ( ! $this->input->get('category_id')) { ?>class="active" <?php } ?>><a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=">전체</a></li>
-            <?php
-            if (element(0, $category)) {
-                foreach (element(0, $category) as $ckey => $cval) {
-            ?>
-                <li role="presentation" <?php if ($this->input->get('category_id') === element('bca_key', $cval)) { ?>class="active" <?php } ?>><a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', $cval); ?>"><?php echo html_escape(element('bca_value', $cval)); ?></a></li>
-            <?php
-                }
-            }
-            ?>
-        </ul>
-    <?php } ?>
-
-    <?php
     $attributes = array('name' => 'fboardlist', 'id' => 'fboardlist');
     echo form_open('', $attributes);
     ?>
@@ -217,21 +235,46 @@ $(document).ready(function() {
 
     <?php
     $i=0;
-    if (element('list', element('data', element('list', $view)))) {
-    echo '<ul>';
-        foreach (element('list', element('data', element('list', $view))) as $result) {
-      
+    if(!empty($this->input->get('category_type'))){
+        $bca_id=array();
+        if (element('list', element('data', element('list', $view)))) {
+        echo '<ul>';
+            foreach (element('list', element('data', element('list', $view))) as $result) {
+            
 
-    ?>
-            <li>
-                <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
-                <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element(0,element('pln_url', $result)); ?>" alt="<?php echo 'webtoon'.$i ?>" title="<?php echo 'webtoon_'.$i ?>"  class="imgUrlExist" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></a>
-            </li>
-        <?php 
-        $i++;
-        } 
-    echo '</ul>';
-    } 
+        ?>
+                <li>
+                    <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
+                    <a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $result)); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element(0,element('pln_url', $result)); ?>" alt="<?php echo 'webtoon'.$i ?>" title="<?php echo 'webtoon_'.$i ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3><?php echo element('bca_value',element('category', $result)) ? html_escape(element('bca_value',element('category', $result))) :'';?></h3></a>
+                </li>
+            <?php 
+            $i++;
+            } 
+        echo '</ul>';
+        }
+    } else {
+        if (element('list', element('data', element('list', $view)))) {
+        echo '<ul>';
+            foreach (element('list', element('data', element('list', $view))) as $result) {
+        
+
+        ?>
+                <li>
+                
+                    <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
+                    
+                    <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element(0,element('pln_url', $result)); ?>" alt="<?php echo 'webtoon'.$i ?>" title="<?php echo 'webtoon_'.$i ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></a>
+              
+                    
+                </li>
+            <?php 
+            $i++;
+            } 
+        echo '</ul>';
+        }
+
+
+    }
     ?>
     </nav>
 </section>
