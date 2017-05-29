@@ -90,51 +90,7 @@ $section_contents[1]='<!-- 광고 영역 -->
   <h4>광고영역</h4>
   '.banner('main_banner_1').'
 </section>
-<!--최신영상 영역-->
-<section class="vod" >
-  <h2>최신영상 <span><a href="'.base_url('group/video').'">더보기 ></a></span> </h2>
-  <nav>
-    <ul>
-      <li> <a href="/post/636"> <img src="'.base_url('assets/mobi/images/mmain/a1.jpg1').'" alt="new_vod01">
-        <h3>?<br/>
-          <span> 동영상종류 : 동양<br/>
-          등록일 : 2017 . 01 . 20 </span> </h3>
-        <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
-        </a> </li>
-      <li> <a href="/post/635"> <img src="'.base_url('assets/mobi/images/mmain/a2.jpg1').'" alt="new_vod02">
-        <h3>?<br/>
-          <span> 동영상종류 : 동양<br/>
-          등록일 : 2017 . 01 . 20 </span> </h3>
-        <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
-        </a> </li>
-      <li> <a href="/post/637"> <img src="'.base_url('assets/mobi/images/mmain/a3.jpg1').'" alt="new_vod03">
-        <h3>?<br/>
-          <span> 동영상종류 :  페티쉬<br/>
-          등록일 : 2017 . 01 . 20 </span> </h3>
-        <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
-        </a> </li>
-      <li> <a href="/post/638"> <img src="'.base_url('assets/mobi/images/mmain/a4.jpg1').'" alt="new_vod04">
-        <h3>?<br/>
-          <span> 동영상종류 : 일본<br/>
-          등록일 : 2017 . 01 . 20 </span> </h3>
-        <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
-        </a> </li>
-      <li> <a href="/post/639"> <img src="'.base_url('assets/mobi/images/mmain/a9.jpg1').'" alt="new_vod05">
-        <h3>?녀<br/>
-          <span> 동영상종류 : 서양<br/>
-          등록일 : 2017 . 01 . 20 </span> </h3>
-        <!--<p> ★ 4.1 <span> 유료 </span> </p>--> 
-        </a> </li>
-    </ul>
-  </nav>
-</section>
 ';
-
-$section_contents[2]='<!-- 무료공개 이벤트 영역 -->
-<section class="event">
-  <h2>무료공개 & 이벤트</h2>
-  '.banner('main_banner_2').'
-</section>';
 
 $i=0;
 
@@ -147,6 +103,12 @@ if (element('board_list', $view)) {
         if(strpos(element('brd_key', $board),'photo') !== false) {
             $limit=9;
             $css='photo';
+            $href_url='pln_url';
+        }
+
+        if(strpos(element('brd_key', $board),'video') !== false) {
+            $limit=5;
+            $css='vod';
             $href_url='pln_url';
         }
 

@@ -1,4 +1,6 @@
-
+<?php 
+$bestComment=['일본','동양','동양','일본','일본'];
+ ?>
 <section class="<?php echo element('css', $view)?>">
 
     <h2>
@@ -26,8 +28,12 @@
                         echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'" data-urltype="'.element('href_url', $view).'" class="imgUrlExist" id="photo_'.$i.'" data-url="/img_url_header.php?url='.urlencode(element('pln_url', $value)).'&filename=photo_'.$i.'" onerror="imgUrlChangeTry(this)">';
                     }
                     ?>
+                    
+                    <h3> <?php echo element('title', $value) && strpos(element('css', $view),'photo') ===false ? element('title', $value) :'';?>
+                        <?php 
+                        if(element('css', $view)==='vod') echo '<span> 동영상종류 : '.$bestComment[$key].'<br/>등록일 : '.element('display_datetime', $value).'</span>';?>
+                    </h3>
                     </a>
-                    <h3> <?php echo element('title', $value) && strpos(element('css', $view),'photo') ===false ? element('title', $value) :'';?></h3>
                 </li>
             <?php
                     $i++;

@@ -13,6 +13,7 @@ $(document).ready(function(){
       $('.music_list table tr').removeClass('checking');
       $(this).addClass('checking');
       $('#iframe_mugic').attr('src' ,$(this).data('href'));
+      $('#iframe_mugic #player video.video-stream').play();
     });
 
     $('.music_list table tr').eq(1).click();
@@ -37,7 +38,7 @@ $(document).ready(function(){
 
 <!-- iframe 영역 -->
   <section class="iframe" style="position:relative; padding-top:53%; margin-bottom:0;">
-    <iframe id="iframe_mugic" width="100%" height="100%" style="position:absolute; top:0; left:0;" src="https://www.youtube.com/embed/ouR4nn1G9r4" frameborder="0" allowfullscreen></iframe>
+    <iframe id="iframe_mugic" width="100%" height="100%" style="position:absolute; top:0; left:0;" src="" frameborder="0" allowfullscreen></iframe>
   </section>
 <!-- --> 
 <!-- Music list 영역 -->
