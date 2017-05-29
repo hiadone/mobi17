@@ -1,12 +1,12 @@
 <?php $this->managelayout->add_css(element('view_skin_url', $layout) . '/css/style.css'); ?>
 <script>
 
-
-<!-- 파일업로드 -->
 $(document).ready(function(){
+
    var fileTarget = $('.filebox .upload-hidden');
 
     fileTarget.on('change', function(){
+
         if(window.FileReader){
             // 파일명 추출
             var filename = $(this)[0].files[0].name;

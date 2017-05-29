@@ -10,13 +10,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 
 if ( ! function_exists('thumb_url')) {
-    function thumb_url($type = '', $filename = '', $thumb_width = 0, $thumb_height = 0, $is_create = false, $is_crop = true, $crop_mode = 'center', $is_sharpen = false, $um_value = '80/0.5/3', $create_animate_thumb = false)
+    function thumb_url($type = '', $filename = '', $file_storage = '', $thumb_width = 0, $thumb_height = 0, $is_create = false, $is_crop = true, $crop_mode = 'center', $is_sharpen = false, $um_value = '80/0.5/3', $create_animate_thumb = false)
     {
         if (empty($type) OR empty($filename)) {
             $filename = 'noimage.gif';
             $thumb = thumbnail(
                 '',
                 $filename,
+                '',
                 $thumb_width,
                 $thumb_height,
                 $is_create,
@@ -26,12 +27,13 @@ if ( ! function_exists('thumb_url')) {
                 $um_value,
                 $create_animate_thumb
             );
-            return site_url($thumb);
+            return site_url($thumb,'',$file_storage);
         }
 
-        $thumb = thumbnail(
+        $thumb = thumbnail(            
             $type,
             $filename,
+            $file_storage,
             $thumb_width,
             $thumb_height,
             $is_create,
@@ -40,21 +42,30 @@ if ( ! function_exists('thumb_url')) {
             $is_sharpen,
             $um_value,
             $create_animate_thumb
+            
         );
-        return site_url($thumb);
+        
+        return site_url($thumb,'',$file_storage);
     }
 }
 
 
 // 출처 : http://www.amina.co.kr
 if ( ! function_exists('thumbnail')) {
-    function thumbnail($type = '', $filename = '', $thumb_width = 0, $thumb_height = 0, $is_create = false, $is_crop = true, $crop_mode = 'center', $is_sharpen = false, $um_value = '80/0.5/3', $create_animate_thumb = false)
+    function thumbnail($type = '', $filename = '',$file_storage = '', $thumb_width = 0, $thumb_height = 0, $is_create = false, $is_crop = true, $crop_mode = 'center', $is_sharpen = false, $um_value = '80/0.5/3', $create_animate_thumb = false)
     {
         $source_file = config_item('uploads_dir') . '/';
+
+
+
         if ($type) {
             $source_file .= $type . '/';
         }
         $source_file .= $filename;
+
+        if($file_storage === 'S3'){
+            return $source_file;
+        }
 
         if (is_file($source_file) === false) { // 원본 파일이 없다면
             return;

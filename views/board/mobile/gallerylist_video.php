@@ -49,7 +49,7 @@ $(document).ready(function() {
 
 
 <div class="wrap02">
-    <section class="list_03 extra_video">
+    <section class="list_02 extra_video">
     
     <h2><?php echo html_escape(element('board_name', element('board', element('list', $view)))); ?><span><a href="<?php echo $men_link ?>"> X</a></span></h2>
     

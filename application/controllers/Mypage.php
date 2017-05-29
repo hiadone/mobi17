@@ -153,9 +153,9 @@ class Mypage extends CB_Controller
                     );
                     $file = $this->Post_file_model
                         ->get_one('', '', $filewhere, '', '', 'pfi_id', 'ASC');
-                    $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file), 50, 40);
+                    $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file),element('file_storage', $file), 50, 40);
                 } else {
-                    $result['list'][$key]['thumb_url'] = get_post_image_url(element('post_content', $val), 50, 40);
+                    $result['list'][$key]['thumb_url'] = get_post_image_url(element('post_content', $val), '',50, 40);
                 }
             }
         }

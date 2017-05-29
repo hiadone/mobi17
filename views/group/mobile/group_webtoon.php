@@ -51,8 +51,8 @@ if (element('board_list', $view)) {
             'css' => $css,
             'href_url' => $href_url,
             'sectionId' => 'menu'.sprintf("%02d", $i),
-            'findex' => 'board_category.bca_order',
-            'forder' => 'ASC',
+            // 'findex' => 'board_category.bca_order',
+            // 'forder' => 'ASC',
         );
         echo $this->board->latest($config);
         if(array_key_exists($i,$section_contents)) echo $section_contents[$i];

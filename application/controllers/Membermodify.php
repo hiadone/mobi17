@@ -769,7 +769,10 @@ class Membermodify extends CB_Controller
             if ($this->member->item('mem_photo')
                 && ($this->input->post('mem_photo_del') OR $updatephoto)) {
                 // 기존 파일 삭제
-                @unlink(config_item('uploads_dir') . '/member_photo/' . $this->member->item('mem_photo'));
+                if($this->member->item('file_storage')==='S3')
+                    $this->aws->deleteObject(config_item('uploads_dir') . '/member_photo/'. $this->member->item('mem_photo'));
+                else 
+                    @unlink(config_item('uploads_dir') . '/member_photo/' . $this->member->item('mem_photo'));
             }
             if ($this->input->post('mem_icon_del')) {
                 $updatedata['mem_icon'] = '';
@@ -779,7 +782,10 @@ class Membermodify extends CB_Controller
             if ($this->member->item('mem_icon')
                 && ($this->input->post('mem_icon_del') OR $updateicon)) {
                 // 기존 파일 삭제
-                @unlink(config_item('uploads_dir') . '/member_icon/' . $this->member->item('mem_icon'));
+                if($this->member->item('file_storage')==='S3')
+                    $this->aws->deleteObject(config_item('uploads_dir') . '/member_icon/'. $this->member->item('mem_icon'));
+                else 
+                    @unlink(config_item('uploads_dir') . '/member_icon/' . $this->member->item('mem_icon'));
             }
 
             $this->Member_model->update($mem_id, $updatedata);

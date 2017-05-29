@@ -97,8 +97,8 @@ class Editorimage extends CB_Controller
                     element('mem_icon', $val)
                 );
                 $result['list'][$key]['download_link'] = admin_url($this->pagedir . '/download/' . element('eim_id', $val));
-                $result['list'][$key]['origin_image_url'] = thumb_url('editor', element('eim_filename', $val));
-                $result['list'][$key]['thumb_url'] = thumb_url('editor', element('eim_filename', $val), '80');
+                $result['list'][$key]['origin_image_url'] = thumb_url('editor', element('eim_filename', $val),element('file_storage', $val));
+                $result['list'][$key]['thumb_url'] = thumb_url('editor', element('eim_filename', $val),element('file_storage', $val), '80');
                 $result['list'][$key]['num'] = $list_num--;
             }
         }

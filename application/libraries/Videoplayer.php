@@ -143,11 +143,12 @@ class Videoplayer extends CI_Controller
     /**
      * Video Player 를 보여줍니다
      */
-    function get_video($vid = '')
+    function get_video($vid = '',$width='',$height='')
     {
         if (empty($vid)) {
             return;
         }
+
 
         $video = array();
         $vid = str_replace("&nbsp;", " ", $vid);
@@ -187,9 +188,12 @@ class Videoplayer extends CI_Controller
                 $video['height'] = 360;
                 break;
         }
+        if(!empty($width)) $video['width'] = $width;
+
+        if(!empty($height)) $video['height'] = $height;
 
         $ratio = round((element('height', $video) / element('width', $video)), 4) * 100;
-
+        if(!empty($height) && !empty($height)) $ratio =0;
         $video_show = '';
 
         if (element('type', $video) === 'file') { //JWPLAYER

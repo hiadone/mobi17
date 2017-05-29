@@ -441,10 +441,7 @@ class Board_write extends CB_Controller
 
                 $filecount = count($_FILES['post_file']['name']);
                 $upload_path = config_item('uploads_dir') . '/post/';
-                if($this->use_file_storage==='S3'){
-                    $upload_path .= cdate('Y') . '/';
-                    $upload_path .= cdate('m') . '/';
-                } else {
+                
                     if (is_dir($upload_path) === false) {
                         mkdir($upload_path, 0707);
                         $file = $upload_path . 'index.php';
@@ -471,7 +468,7 @@ class Board_write extends CB_Controller
                         @fclose($f);
                         @chmod($file, 0644);
                     }                    
-                }
+                
 
                 foreach ($_FILES['post_file']['name'] as $i => $value) {
                     if ($value) {
@@ -1416,238 +1413,146 @@ class Board_write extends CB_Controller
         $uploadfiledata = '';
         $uploadfiledata2 = '';
         if ($use_upload === true && $form_validation && element('use_upload_file', $board)) {
-            $this->load->library('upload');
-            if($this->use_file_storage==='S3'){
-
-                if (isset($_FILES) && isset($_FILES['post_file']) && isset($_FILES['post_file']['name']) && is_array($_FILES['post_file']['name'])) {
-                    $filecount = count($_FILES['post_file']['name']);
-                    $upload_path = config_item('uploads_dir') . '/post/';
-                    $upload_path .= cdate('Y') . '/';
-                    $upload_path .= cdate('m') . '/';
-
-                    foreach ($_FILES['post_file']['name'] as $i => $value) {
-                        if ($value) {
-                            $uploadconfig = '';
-                            $uploadconfig['upload_path'] = $upload_path;
-                            $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
-                                ? element('upload_file_extension', $board) : '*';
-                            $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
-                            $uploadconfig['encrypt_name'] = true;
-
-                            $this->upload->initialize($uploadconfig);
-                            $_FILES['userfile']['name'] = $_FILES['post_file']['name'][$i];
-                            $_FILES['userfile']['type'] = $_FILES['post_file']['type'][$i];
-                            $_FILES['userfile']['tmp_name'] = $_FILES['post_file']['tmp_name'][$i];
-                            $_FILES['userfile']['error'] = $_FILES['post_file']['error'][$i];
-                            $_FILES['userfile']['size'] = $_FILES['post_file']['size'][$i];
-                            if ($this->upload->do_upload()) {
-                                $filedata = $this->upload->data();
-
-                                $uploadfiledata[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
-                                $uploadfiledata[$i]['pfi_originname'] = element('orig_name', $filedata);
-                                $uploadfiledata[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
-                                $uploadfiledata[$i]['pfi_width'] = element('image_width', $filedata) ? element('image_width', $filedata) : 0;
-                                $uploadfiledata[$i]['pfi_height'] = element('image_height', $filedata) ? element('image_height', $filedata) : 0;
-                                $uploadfiledata[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
-                                $uploadfiledata[$i]['is_image'] = element('is_image', $filedata) ? element('is_image', $filedata) : 0;
-                            } else {
-                                $file_error = $this->upload->display_errors();
-                                break;
-                            }
-                        }
-                    }
+            $this->load->library('upload');            
+            if (isset($_FILES) && isset($_FILES['post_file']) && isset($_FILES['post_file']['name']) && is_array($_FILES['post_file']['name'])) {
+                $filecount = count($_FILES['post_file']['name']);
+                $upload_path = config_item('uploads_dir') . '/post/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
                 }
-                if (isset($_FILES) && isset($_FILES['post_file_update'])
-                    && isset($_FILES['post_file_update']['name'])
-                    && is_array($_FILES['post_file_update']['name'])
-                    && $file_error === '') {
-                    $filecount = count($_FILES['post_file_update']['name']);
-                    $upload_path = config_item('uploads_dir') . '/post/';
-                    $upload_path .= cdate('Y') . '/';                    
-                    $upload_path .= cdate('m') . '/';
-
-                    foreach ($_FILES['post_file_update']['name'] as $i => $value) {
-                        if ($value) {
-                            $uploadconfig = '';
-                            $uploadconfig['upload_path'] = $upload_path;
-                            $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
-                                ? element('upload_file_extension', $board) : '*';
-                            $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
-                            $uploadconfig['encrypt_name'] = true;
-                            $this->upload->initialize($uploadconfig);
-                            $_FILES['userfile']['name'] = $_FILES['post_file_update']['name'][$i];
-                            $_FILES['userfile']['type'] = $_FILES['post_file_update']['type'][$i];
-                            $_FILES['userfile']['tmp_name'] = $_FILES['post_file_update']['tmp_name'][$i];
-                            $_FILES['userfile']['error'] = $_FILES['post_file_update']['error'][$i];
-                            $_FILES['userfile']['size'] = $_FILES['post_file_update']['size'][$i];
-                            if ($this->upload->do_upload()) {
-                                $filedata = $this->upload->data();
-
-                                $oldpostfile = $this->Post_file_model->get_one($i);
-                                if ((int) element('post_id', $oldpostfile) !== (int) element('post_id', $post)) {
-                                    alert('잘못된 접근입니다');
-                                }
-
-                                $this->aws->deleteObject(config_item('uploads_dir') . '/post/'.$oldpostfile['pfi_filename']);                                
-
-                                $uploadfiledata2[$i]['pfi_id'] = $i;
-                                $uploadfiledata2[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
-                                $uploadfiledata2[$i]['pfi_originname'] = element('orig_name', $filedata);
-                                $uploadfiledata2[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
-                                $uploadfiledata2[$i]['pfi_width'] = element('image_width', $filedata)
-                                    ? element('image_width', $filedata) : 0;
-                                $uploadfiledata2[$i]['pfi_height'] = element('image_height', $filedata)
-                                    ? element('image_height', $filedata) : 0;
-                                $uploadfiledata2[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
-                                $uploadfiledata2[$i]['is_image'] = element('is_image', $filedata)
-                                    ? element('is_image', $filedata) : 0;
-                            } else {
-                                $file_error = $this->upload->display_errors();
-                                break;
-                            }
-                        }
-                    }
+                $upload_path .= cdate('Y') . '/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
                 }
-            } else {
-                if (isset($_FILES) && isset($_FILES['post_file']) && isset($_FILES['post_file']['name']) && is_array($_FILES['post_file']['name'])) {
-                    $filecount = count($_FILES['post_file']['name']);
-                    $upload_path = config_item('uploads_dir') . '/post/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
-                    $upload_path .= cdate('Y') . '/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
-                    $upload_path .= cdate('m') . '/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
-
-                    foreach ($_FILES['post_file']['name'] as $i => $value) {
-                        if ($value) {
-                            $uploadconfig = '';
-                            $uploadconfig['upload_path'] = $upload_path;
-                            $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
-                                ? element('upload_file_extension', $board) : '*';
-                            $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
-                            $uploadconfig['encrypt_name'] = true;
-
-                            $this->upload->initialize($uploadconfig);
-                            $_FILES['userfile']['name'] = $_FILES['post_file']['name'][$i];
-                            $_FILES['userfile']['type'] = $_FILES['post_file']['type'][$i];
-                            $_FILES['userfile']['tmp_name'] = $_FILES['post_file']['tmp_name'][$i];
-                            $_FILES['userfile']['error'] = $_FILES['post_file']['error'][$i];
-                            $_FILES['userfile']['size'] = $_FILES['post_file']['size'][$i];
-                            if ($this->upload->do_upload()) {
-                                $filedata = $this->upload->data();
-
-                                $uploadfiledata[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
-                                $uploadfiledata[$i]['pfi_originname'] = element('orig_name', $filedata);
-                                $uploadfiledata[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
-                                $uploadfiledata[$i]['pfi_width'] = element('image_width', $filedata) ? element('image_width', $filedata) : 0;
-                                $uploadfiledata[$i]['pfi_height'] = element('image_height', $filedata) ? element('image_height', $filedata) : 0;
-                                $uploadfiledata[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
-                                $uploadfiledata[$i]['is_image'] = element('is_image', $filedata) ? element('is_image', $filedata) : 0;
-                            } else {
-                                $file_error = $this->upload->display_errors();
-                                break;
-                            }
-                        }
-                    }
+                $upload_path .= cdate('m') . '/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
                 }
-                if (isset($_FILES) && isset($_FILES['post_file_update'])
-                    && isset($_FILES['post_file_update']['name'])
-                    && is_array($_FILES['post_file_update']['name'])
-                    && $file_error === '') {
-                    $filecount = count($_FILES['post_file_update']['name']);
-                    $upload_path = config_item('uploads_dir') . '/post/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
-                    $upload_path .= cdate('Y') . '/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
-                    $upload_path .= cdate('m') . '/';
-                    if (is_dir($upload_path) === false) {
-                        mkdir($upload_path, 0707);
-                        $file = $upload_path . 'index.php';
-                        $f = @fopen($file, 'w');
-                        @fwrite($f, '');
-                        @fclose($f);
-                        @chmod($file, 0644);
-                    }
 
-                    foreach ($_FILES['post_file_update']['name'] as $i => $value) {
-                        if ($value) {
-                            $uploadconfig = '';
-                            $uploadconfig['upload_path'] = $upload_path;
-                            $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
-                                ? element('upload_file_extension', $board) : '*';
-                            $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
-                            $uploadconfig['encrypt_name'] = true;
-                            $this->upload->initialize($uploadconfig);
-                            $_FILES['userfile']['name'] = $_FILES['post_file_update']['name'][$i];
-                            $_FILES['userfile']['type'] = $_FILES['post_file_update']['type'][$i];
-                            $_FILES['userfile']['tmp_name'] = $_FILES['post_file_update']['tmp_name'][$i];
-                            $_FILES['userfile']['error'] = $_FILES['post_file_update']['error'][$i];
-                            $_FILES['userfile']['size'] = $_FILES['post_file_update']['size'][$i];
-                            if ($this->upload->do_upload()) {
-                                $filedata = $this->upload->data();
+                foreach ($_FILES['post_file']['name'] as $i => $value) {
+                    if ($value) {
+                        $uploadconfig = '';
+                        $uploadconfig['upload_path'] = $upload_path;
+                        $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
+                            ? element('upload_file_extension', $board) : '*';
+                        $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
+                        $uploadconfig['encrypt_name'] = true;
 
-                                $oldpostfile = $this->Post_file_model->get_one($i);
-                                if ((int) element('post_id', $oldpostfile) !== (int) element('post_id', $post)) {
-                                    alert('잘못된 접근입니다');
-                                }
-                                if(element('file_storage',$oldpostfile)=="S3")
-                                    $this->aws->deleteObject(config_item('uploads_dir') . '/post/'.$oldpostfile['pfi_filename']);
-                                else @unlink(config_item('uploads_dir') .  '/post/' . element('pfi_filename', $oldpostfile));
+                        $this->upload->initialize($uploadconfig);
+                        $_FILES['userfile']['name'] = $_FILES['post_file']['name'][$i];
+                        $_FILES['userfile']['type'] = $_FILES['post_file']['type'][$i];
+                        $_FILES['userfile']['tmp_name'] = $_FILES['post_file']['tmp_name'][$i];
+                        $_FILES['userfile']['error'] = $_FILES['post_file']['error'][$i];
+                        $_FILES['userfile']['size'] = $_FILES['post_file']['size'][$i];
+                        if ($this->upload->do_upload()) {
+                            $filedata = $this->upload->data();
 
-                                $uploadfiledata2[$i]['pfi_id'] = $i;
-                                $uploadfiledata2[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
-                                $uploadfiledata2[$i]['pfi_originname'] = element('orig_name', $filedata);
-                                $uploadfiledata2[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
-                                $uploadfiledata2[$i]['pfi_width'] = element('image_width', $filedata)
-                                    ? element('image_width', $filedata) : 0;
-                                $uploadfiledata2[$i]['pfi_height'] = element('image_height', $filedata)
-                                    ? element('image_height', $filedata) : 0;
-                                $uploadfiledata2[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
-                                $uploadfiledata2[$i]['is_image'] = element('is_image', $filedata)
-                                    ? element('is_image', $filedata) : 0;
-                            } else {
-                                $file_error = $this->upload->display_errors();
-                                break;
-                            }
+                            $uploadfiledata[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
+                            $uploadfiledata[$i]['pfi_originname'] = element('orig_name', $filedata);
+                            $uploadfiledata[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
+                            $uploadfiledata[$i]['pfi_width'] = element('image_width', $filedata) ? element('image_width', $filedata) : 0;
+                            $uploadfiledata[$i]['pfi_height'] = element('image_height', $filedata) ? element('image_height', $filedata) : 0;
+                            $uploadfiledata[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
+                            $uploadfiledata[$i]['is_image'] = element('is_image', $filedata) ? element('is_image', $filedata) : 0;
+                        } else {
+                            $file_error = $this->upload->display_errors();
+                            break;
                         }
                     }
                 }
             }
+            if (isset($_FILES) && isset($_FILES['post_file_update'])
+                && isset($_FILES['post_file_update']['name'])
+                && is_array($_FILES['post_file_update']['name'])
+                && $file_error === '') {
+                $filecount = count($_FILES['post_file_update']['name']);
+                $upload_path = config_item('uploads_dir') . '/post/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
+                }
+                $upload_path .= cdate('Y') . '/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
+                }
+                $upload_path .= cdate('m') . '/';
+                if (is_dir($upload_path) === false) {
+                    mkdir($upload_path, 0707);
+                    $file = $upload_path . 'index.php';
+                    $f = @fopen($file, 'w');
+                    @fwrite($f, '');
+                    @fclose($f);
+                    @chmod($file, 0644);
+                }
+
+                foreach ($_FILES['post_file_update']['name'] as $i => $value) {
+                    if ($value) {
+                        $uploadconfig = '';
+                        $uploadconfig['upload_path'] = $upload_path;
+                        $uploadconfig['allowed_types'] = element('upload_file_extension', $board)
+                            ? element('upload_file_extension', $board) : '*';
+                        $uploadconfig['max_size'] = element('upload_file_max_size', $board) * 1024;
+                        $uploadconfig['encrypt_name'] = true;
+                        $this->upload->initialize($uploadconfig);
+                        $_FILES['userfile']['name'] = $_FILES['post_file_update']['name'][$i];
+                        $_FILES['userfile']['type'] = $_FILES['post_file_update']['type'][$i];
+                        $_FILES['userfile']['tmp_name'] = $_FILES['post_file_update']['tmp_name'][$i];
+                        $_FILES['userfile']['error'] = $_FILES['post_file_update']['error'][$i];
+                        $_FILES['userfile']['size'] = $_FILES['post_file_update']['size'][$i];
+                        if ($this->upload->do_upload()) {
+                            $filedata = $this->upload->data();
+
+                            $oldpostfile = $this->Post_file_model->get_one($i);
+                            if ((int) element('post_id', $oldpostfile) !== (int) element('post_id', $post)) {
+                                alert('잘못된 접근입니다');
+                            }
+                            if(element('file_storage',$oldpostfile)==="S3")
+                                $this->aws->deleteObject(config_item('uploads_dir') . '/post/'.$oldpostfile['pfi_filename']);
+                            else @unlink(config_item('uploads_dir') .  '/post/' . element('pfi_filename', $oldpostfile));
+
+                            $uploadfiledata2[$i]['pfi_id'] = $i;
+                            $uploadfiledata2[$i]['pfi_filename'] = cdate('Y') . '/' . cdate('m') . '/' . element('file_name', $filedata);
+                            $uploadfiledata2[$i]['pfi_originname'] = element('orig_name', $filedata);
+                            $uploadfiledata2[$i]['pfi_filesize'] = intval(element('file_size', $filedata) * 1024);
+                            $uploadfiledata2[$i]['pfi_width'] = element('image_width', $filedata)
+                                ? element('image_width', $filedata) : 0;
+                            $uploadfiledata2[$i]['pfi_height'] = element('image_height', $filedata)
+                                ? element('image_height', $filedata) : 0;
+                            $uploadfiledata2[$i]['pfi_type'] = str_replace('.', '', element('file_ext', $filedata));
+                            $uploadfiledata2[$i]['is_image'] = element('is_image', $filedata)
+                                ? element('is_image', $filedata) : 0;
+                        } else {
+                            $file_error = $this->upload->display_errors();
+                            break;
+                        }
+                    }
+                }
+            }
+            
         }
 
 
@@ -2005,7 +1910,7 @@ class Board_write extends CB_Controller
                         if ( ! element('post_id', $oldpostfile) OR (int) element('post_id', $oldpostfile) !== (int) element('post_id', $post)) {
                             alert('잘못된 접근입니다.');
                         }
-                        if(element('file_storage',$oldpostfile)=="S3")
+                        if(element('file_storage',$oldpostfile)==="S3")
                             $this->aws->deleteObject(config_item('uploads_dir') . '/post/'.$oldpostfile['pfi_filename']);
                         else @unlink(config_item('uploads_dir') .  '/post/' . element('pfi_filename', $oldpostfile));
                         $this->Post_file_model->delete($key);

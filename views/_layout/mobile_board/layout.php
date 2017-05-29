@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name=”referrer” content=”no-referrer” />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?php echo html_escape(element('page_title', $layout)); ?></title>
@@ -297,16 +296,17 @@ $(document).on('click', '.viewmobileversion', function(){
 
 $(document).ready(function(){
 
-    var menu01 = $('.sub nav ul li:nth-child(<?php echo $segment_arr[1] ?>) a')
+    <?php if($this->uri->segment(2)!=='mugic'){ ?>
+    var menu01 = $('.sub nav ul li:nth-child(<?php echo $segment_arr[1] ?>) a');
     menu01.css('color','#fff');
     menu01.css('background-color' , '#345982');
     menu01.css('font-weight' , 'bold');
 
     $('.submenu_01 nav ul li:nth-child(<?php echo $segment_arr[1] ?>) a').css('font-weight','bold').css('color','#345982');
-
+    <?php } ?>
    
     
-    <?php if($segment_arr[0]=='community'){ ?>
+    <?php if($this->uri->segment(2)==='mugic'){ ?>
     var position = $('.main ul li:last-child').offset(); 
     $('.main').animate({scrollLeft : position.left});
     <?php } ?>

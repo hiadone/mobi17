@@ -1,4 +1,4 @@
-<?php $segment_arr=explode("_",$this->uri->segment(2,'community_1')); ?>
+<?php $this->managelayout->add_css(element('view_skin_url', $layout) . '/css/style.css'); ?>
 <?php echo element('headercontent', element('board', element('list', $view))); ?>
 
 
@@ -7,187 +7,102 @@
 $(document).ready(function(){
     
 
-    var select = $("#sel");
     
-    select.change(function(){
-        var select_name = $(this).children("option:selected").text();
-        $(this).siblings("label").text(select_name);
+    
+     $('.music_list table tr').click(function(){
+      $('.music_list table tr').removeClass('checking');
+      $(this).addClass('checking');
+      $('#iframe_mugic').attr('src' ,$(this).data('href'));
     });
+
+    $('.music_list table tr').eq(1).click();
+
 });
 </script>
 
 <?php
-
-  
     $menu = element('menu', $layout);
     foreach (element(0, $menu) as $mkey => $mval) {
-        if(strpos($mval['men_link'],$segment_arr[0]) !==false) {
+        if(strpos($mval['men_link'],$this->uri->segment(2,'mugic')) !==false) {
             $men_id = $mval['men_id'];
             $men_name = $mval['men_name'];
+            $men_link = $mval['men_link'];  
         }
     }
     
    
     ?>
 
-<div class="wrap02">
+<div class="wrap03">
 
-<section>
+<!-- iframe 영역 -->
+  <section class="iframe" style="position:relative; padding-top:53%; margin-bottom:0;">
+    <iframe id="iframe_mugic" width="100%" height="100%" style="position:absolute; top:0; left:0;" src="https://www.youtube.com/embed/ouR4nn1G9r4" frameborder="0" allowfullscreen></iframe>
+  </section>
+<!-- --> 
+<!-- Music list 영역 -->
+  <section class="music_list">
 
-<h2> <?php echo html_escape($men_name); ?> > <?php echo html_escape(element('board_name', element('board', element('list', $view)))); ?></h2>
-    
- 
-
-<form class="" action="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>" onSubmit="return postSearch(this);">
-    <input type="hidden" name="findex" value="<?php echo html_escape($this->input->get('findex')); ?>" />
-    <input type="hidden" name="category_id" value="<?php echo html_escape($this->input->get('category_id')); ?>" />
-    <div class="select_box">
-        <label for="select">선택 ▼</label>
-        <select class="select color" id="sel" name="sfield">
-            <option value="post_both" <?php echo ($this->input->get('sfield') === 'post_both') ? ' selected="selected" ' : ''; ?>>제목+내용</option>
-            <option value="post_title" <?php echo ($this->input->get('sfield') === 'post_title') ? ' selected="selected" ' : ''; ?>>제목</option>
-            <option value="post_content" <?php echo ($this->input->get('sfield') === 'post_content') ? ' selected="selected" ' : ''; ?>>내용</option>
-            <option value="post_nickname" <?php echo ($this->input->get('sfield') === 'post_nickname') ? ' selected="selected" ' : ''; ?>>닉네임</option>
-            <!-- <option value="post_userid" <?php echo ($this->input->get('sfield') === 'post_userid') ? ' selected="selected" ' : ''; ?>>회원아이디</option> -->
-        </select>
-    </div>
-    <div class="search">
-        <input type="text" class="input px100" placeholder="Search" name="skeyword" value="<?php echo html_escape($this->input->get('skeyword')); ?>" />
-    </div>
-    <div class="submit">
-        <input type="submit" value="검 색">
-    </div>
-  
-</form>
-           
-       
-            <?php if (element('point_info', element('list', $view))) { ?>
-                <div class="point-info pull-right mr10">
-                    <button type="button" class="btn-point-info" ><i class="fa fa-info-circle"></i></button>
-                    <div class="point-info-content alert alert-warning"><strong>포인트안내</strong><br /><?php echo element('point_info', element('list', $view)); ?></div>
-                </div>
-            <?php } ?>
-       
-        <script type="text/javascript">
-        //<![CDATA[
-        function postSearch(f) {
-            var skeyword = f.skeyword.value.replace(/(^\s*)|(\s*$)/g,'');
-            if (skeyword.length < 2) {
-                alert('2글자 이상으로 검색해 주세요');
-                f.skeyword.focus();
-                return false;
-            }
-            return true;
-        }
-        function toggleSearchbox() {
-            $('.searchbox').show();
-            $('.searchbuttonbox').hide();
-        }
-        <?php
-            if ($this->input->get('skeyword')) {
-                echo 'toggleSearchbox();';
-            }
-        ?>
-        $(document).on('click', '.btn-point-info', function() {
-            $('.point-info-content').toggle();
-        });
-        //]]>
-        </script>
-    
-
-    <?php
-    if (element('use_category', element('board', element('list', $view))) && element('cat_display_style', element('board', element('list', $view))) === 'tab') {
-        $category = element('category', element('board', element('list', $view)));
-    ?>
-        <ul class="nav nav-tabs clearfix">
-            <li role="presentation" <?php if ( ! $this->input->get('category_id')) { ?>class="active" <?php } ?>><a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=">전체</a></li>
-            <?php
-            if (element(0, $category)) {
-                foreach (element(0, $category) as $ckey => $cval) {
-            ?>
-                <li role="presentation" <?php if ($this->input->get('category_id') === element('bca_key', $cval)) { ?>class="active" <?php } ?>><a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', $cval); ?>"><?php echo html_escape(element('bca_value', $cval)); ?></a></li>
-            <?php
-                }
-            }
-            ?>
-        </ul>
+    <h2><?php echo element('bca_value',element('category', element(0,element('list', element('data', element('list', $view)))))) ? html_escape(element('bca_value',element('category', element(0,element('list', element('data', element('list', $view))))))) :'';?></h2>
+    <?php if (element('point_info', element('list', $view))) { ?>
+        <div class="point-info pull-right mr10">
+            <button type="button" class="btn-point-info" ><i class="fa fa-info-circle"></i></button>
+            <div class="point-info-content alert alert-warning"><strong>포인트안내</strong><br /><?php echo element('point_info', element('list', $view)); ?></div>
+        </div>
     <?php } ?>
+    
 
     <?php
     $attributes = array('name' => 'fboardlist', 'id' => 'fboardlist');
     echo form_open('', $attributes);
     ?>
         <!-- 리스트-->
-    <div class="com">
-        <nav>
+    
         <?php if (element('is_admin', $view)) { ?>
         <div><label for="all_boardlist_check"><input id="all_boardlist_check" onclick="if (this.checked) all_boardlist_checked(true); else all_boardlist_checked(false);" type="checkbox" /> 전체선택</label></div>
         <?php } ?>
-            <ul>
-            <?php
-            if (element('notice_list', element('list', $view))) {
-                foreach (element('notice_list', element('list', $view)) as $result) {
-            ?>
-                <div>
-                    <?php if (element('is_admin', $view)) { ?><span scope="row"><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /></span><?php } ?>
-                    <span><span class="label label-primary">공지</span></span>
-                    <span>
-                        <?php if (element('post_reply', $result)) { ?><span class="label label-primary" style="margin-left:<?php echo strlen(element('post_reply', $result)) * 10; ?>px">Re</span><?php } ?>
-                        <a href="<?php echo element('post_url', $result); ?>" style="
-                            <?php
-                            if (element('post_id', element('post', $view)) === element('post_id', $result)) {
-                                echo 'font-weight:bold;';
-                            }
-                            ?>
-                        " title="<?php echo html_escape(element('title', $result)); ?>"><?php echo html_escape(element('title', $result)); ?></a>
-                        <?php if (element('is_mobile', $result)) { ?><span class="fa fa-wifi"></span><?php } ?>
-                        <?php if (element('post_file', $result)) { ?><span class="fa fa-download"></span><?php } ?>
-                        <?php if (element('post_secret', $result)) { ?><span class="fa fa-lock"></span><?php } ?>
-                        <?php if (element('post_comment_count', $result)) { ?><span class="label label-warning">+<?php echo element('post_comment_count', $result); ?></span><?php } ?>
-                    <span><?php echo element('display_name', $result); ?></span>
-                    <span><?php echo element('display_datetime', $result); ?></span>
-                    <span><?php echo number_format(element('post_hit', $result)); ?></span>
-                </div>
-            <?php
-                }
-            }
+        <table>
+          <tr>
+            <th>Rank</th>
+            <th>Title</th>
+            <th>Artist</th>
+          </tr>
+            <?php 
+            $i=0;
             if (element('list', element('data', element('list', $view)))) {
                 
                 foreach (element('list', element('data', element('list', $view))) as $result) {
+                    
+                $i++;
             ?>
-                <li>
+                <tr data-href="<?php echo !empty(element(1,element('pln_url', $result))) ? element(1,element('pln_url', $result)):element(0,element('pln_url', $result)); ?>?version=2&autoplay=1&showinfo=0&rel=0" class="" title="<?php echo html_escape(element('title', $result)); ?>" style="cursor:pointer;">
+                    <td>
                     <?php if (element('is_admin', $view)) { ?><span scope="row"><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /></span><?php } ?>
-                    
-                    
-                        <?php if (element('category', $result)) { ?><a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?category_id=<?php echo html_escape(element('bca_key', element('category', $result))); ?>"><span class="label label-default"><?php echo html_escape(element('bca_value', element('category', $result))); ?></span></a><?php } ?>
-                        <?php if (element('post_reply', $result)) { ?><span class="label label-primary" style="margin-left:<?php echo strlen(element('post_reply', $result)) * 10; ?>px">Re</span><?php } ?>
-                        <a href="<?php echo element('post_url', $result); ?>" style="<?php
-                        if (element('post_id', element('post', $view)) === element('post_id', $result)) {
-                            echo 'font-weight:bold;';
-                        }
-                        ?>" title="<?php echo html_escape(element('title', $result)); ?>"><h4><?php echo html_escape(element('title', $result)); ?> <?php if(element('post_comment_count', $result)>0) echo '['.element('post_comment_count', $result).']'; ?></h4><p><?php echo element('post_nickname', $result); ?> | 조회:<?php echo number_format(element('post_hit', $result)); ?> | <?php echo element('display_datetime', $result); ?> </p></a>
-                </li>
+                    <?php echo $i ?>
+                    </td>
+                    <td>
+                    <?php echo html_escape(element('title', $result)); ?><img src="<?php echo base_url('/assets/mobi/images/play.png') ?>" alt="play">
+                    </td>
+                    <td>
+                        <?php echo element('bca_value',element('category', $result)) ? html_escape(element('bca_value',element('category', $result))) :'';?>
+                    </td>
+                </tr>
             <?php
                 }
             }
-            if ( ! element('notice_list', element('list', $view)) && ! element('list', element('data', element('list', $view)))) {
+            if (  ! element('list', element('data', element('list', $view)))) {
             ?>
-                <li>
-                    <h4>게시물이 없습니다</h4>
-                </li>
+                <tr>
+                    <td colspan=3><h4>게시물이 없습니다</h4></td>
+                </tr>
             <?php } ?>
-            </ul>
-        </nav>
-    </div>
+            </table>
+       
     <?php echo form_close(); ?>
 
-    <div class="table-bottom mt20">
+    <div class="table-bottom mt10">
         <div class="pull-left mr10 ">
-            <!-- <a href="<?php echo element('list_url', element('list', $view)); ?>" class="btn btn-default btn-sm">목록</a> -->
-            <?php if (element('search_list_url', element('list', $view))) { ?>
-                <!-- <a href="<?php echo element('search_list_url', element('list', $view)); ?>" class="btn btn-default btn-sm">검색목록</a> -->
-                <a href="<?php echo element('list_url', element('list', $view)); ?>" class="btn btn-default btn-sm">목록</a>
-            <?php } ?>
+            <a href="<?php echo $men_link ?>" class="btn btn-default btn-sm">목록</a>
         </div>
         <?php if (element('is_admin', $view)) { ?>
             <div class="pull-left">
@@ -217,10 +132,18 @@ $(document).ready(function(){
             </div>
         <?php } ?>
     </div>
+    
     <nav><?php echo element('paging', element('list', $view)); ?></nav>
+    </section>
 </div>
 
 <?php echo element('footercontent', element('board', element('list', $view))); ?>
+
+<!-- 광고 영역(class="bigbanner") -->
+<section class="bigbanner">
+    <h4>광고영역</h4>
+    <?php echo banner('mugic_banner_2'); ?>
+</section>
 
 <?php
 if (element('highlight_keyword', element('list', $view))) {

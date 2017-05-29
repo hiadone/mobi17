@@ -1,5 +1,5 @@
 <?php 
-if(element('css', $view) =='imglist'){
+if(strpos(element('css', $view),'imglist') !== false){
     $i=1;
     if (element('latest', $view)) {
     //echo element('pln_url',element('0', element('latest', $view)));
@@ -17,7 +17,7 @@ if(element('css', $view) =='imglist'){
 <section class="<?php echo element('css', $view)?>" id="<?php echo element('sectionId', $view)?>">
     <h2>
     <?php 
-        if(html_escape(element('board_name', element('board', $view)))=='전체') echo '';
+        if(html_escape(element('board_name', element('board', $view)))==='전체') echo '';
         else echo html_escape(element('board_name', element('board', $view)));
     ?> 
     
@@ -38,7 +38,7 @@ if(element('css', $view) =='imglist'){
                     //print_r($value);
 
 
-                if($key==0 && element('css', $view) =='imglist') continue;
+                if($key==0 && strpos(element('css', $view),'imglist') !== false) continue;
             ?>
                 <li><a href="<?php echo element(element('href_url', $view), $value); ?>" title="<?php echo html_escape(element('title', $value)); ?>">
                     <?php 
@@ -51,7 +51,7 @@ if(element('css', $view) =='imglist'){
                     
                     <h3> <?php echo element('title', $value) ? html_escape(element('title', $value)) :'';?>
                         <?php if(element('css', $view) =='best') {
-                            echo '<br/><span> E-BOOK종류 : 19금 소설<br/>등록일 : '.element('display_datetime', $value).'</span> ';
+                            echo '<br/><span> 소설 종류 : 공포<br/>등록일 : '.element('display_datetime', $value).'</span> ';
                         }?>
                     </h3></a>
                 </li>

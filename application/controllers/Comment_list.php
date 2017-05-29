@@ -228,8 +228,8 @@ class Comment_list extends CB_Controller
                     $result['list'][$key]['display_ip'] = display_ipaddress(element('cmt_ip', $val), $this->cbconfig->item('ip_display_style'));
                 }
                 $result['list'][$key]['member_photo_url']
-                    = member_photo_url(element('mem_photo', $val), 64, 64)
-                    ? member_photo_url(element('mem_photo', $val), 64, 64)
+                    = member_photo_url(element('mem_photo', $val),element('file_storage', $val), 64, 64)
+                    ? member_photo_url(element('mem_photo', $val),element('file_storage', $val), 64, 64)
                     : site_url('assets/images/member_default.gif');
 
                 $result['list'][$key]['cmt_depth'] = strlen($result['list'][$key]['cmt_reply']) * 30;

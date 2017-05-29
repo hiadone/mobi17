@@ -67,9 +67,7 @@ $(document).ready(function() {
 
 });
 </script>
-<style>
-section.slide ul li:nth-child(n+2){display:none;}
-</style>
+
 <!-- 슬라이드 -->
 <section class="slide">
   <h4>슬라이드 영역</h4>

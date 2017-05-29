@@ -39,7 +39,8 @@ class Imagelib extends CI_Controller
         if (isset($match[1]) && $match[1]) {
             foreach ($match[1] as $link) {
                 $url = @parse_url($link);
-                if ( ! empty($url['host']) && $url['host'] !== $this->CI->input->server('HTTP_HOST')) {
+                $s3_url = @parse_url(config_item('s3_url'));
+                if ( ! empty($url['host']) && $url['host'] !== $this->CI->input->server('HTTP_HOST') && $url['host'] !=$s3_url['host']) {
                     $image = $this->save_external_image($link, $url['path']);
                     if ($image)    {
                         $content = str_replace($link, $image, $content);
@@ -102,7 +103,8 @@ class Imagelib extends CI_Controller
             list($usec, $sec) = explode(' ', microtime());
             $file_name = md5(uniqid(mt_rand())) . '_' . str_replace('.', '', $sec . $usec) . '.' . $ext;
             $save_dir = $upload_path. $file_name;
-            $save_url = site_url(config_item('uploads_dir') . '/editor/' . cdate('Y') . '/' . cdate('m') . '/' . $file_name);
+
+            $save_url = site_url(config_item('uploads_dir') . '/editor/' . cdate('Y') . '/' . cdate('m') . '/' . $file_name,'',config_item('use_file_storage'));
 
             $fp = fopen($save_dir, 'w');
             fwrite($fp, $rawdata);

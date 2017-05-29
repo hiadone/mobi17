@@ -418,13 +418,13 @@ class Board_post extends CB_Controller
                 'post_id' => $post_id,
             );
             $view['view']['link'] = $link = $this->Post_link_model
-                ->get('', '', $linkwhere, '', '', 'pln_id', 'ASC');
+                ->get('', '', $linkwhere, '1', '', 'pln_id', 'ASC');
             if ($link && is_array($link)) {
                 foreach ($link as $key => $value) {
                     $view['view']['link'][$key]['link_link'] = site_url('postact/link/' . element('pln_id', $value));
                     if (element('use_autoplay', $board)) {
                         $link_player .= $this->videoplayer->
-                            get_video(prep_url(element('pln_url', $value)));
+                            get_video(prep_url(element('pln_url', $value)),'100%','100%');
                     }
                 }
             }
@@ -447,33 +447,19 @@ class Board_post extends CB_Controller
 
             if ($file && is_array($file)) {
                 foreach ($file as $key => $value) {
-                    if($this->use_file_storage === "S3"){
-                        if (false) {
-                            $value['origin_image_url'] = $this->config->config['s3_url'] .config_item('uploads_dir'). '/post/' . element('pfi_filename', $value);
-
-                            $value['thumb_image_url'] = $value['origin_image_url'];
-                            //$value['thumb_image_url'] = thumb_url('post', element('pfi_filename', $value), $image_width);
-                            $view['view']['file_image'][] = $value;
-                        } else {
-                            $value['download_link'] = site_url('postact/download/' . element('pfi_id', $value));
-                            $view['view']['file_download'][] = $value;
-                            if (element('use_autoplay', $board) && in_array(element('pfi_type', $value), $play_extension)) {
-                                $file_player .= $this->videoplayer->get_jwplayer($this->config->config['s3_url'] . '/post/' . element('pfi_filename', $value), $image_width);
-                            }
-                        }
+                    
+                    if (element('pfi_is_image', $value)) {
+                        $value['origin_image_url'] = site_url(config_item('uploads_dir') . '/post/' . element('pfi_filename', $value),'',element('file_storage', $value));
+                        $value['thumb_image_url'] = thumb_url('post', element('pfi_filename', $value),element('file_storage', $value), $image_width);
+                        $view['view']['file_image'][] = $value;
                     } else {
-                        if (element('pfi_is_image', $value)) {
-                            $value['origin_image_url'] = site_url(config_item('uploads_dir') . '/post/' . element('pfi_filename', $value));
-                            $value['thumb_image_url'] = thumb_url('post', element('pfi_filename', $value), $image_width);
-                            $view['view']['file_image'][] = $value;
-                        } else {
-                            $value['download_link'] = site_url('postact/download/' . element('pfi_id', $value));
-                            $view['view']['file_download'][] = $value;
-                            if (element('use_autoplay', $board) && in_array(element('pfi_type', $value), $play_extension)) {
-                                $file_player .= $this->videoplayer->get_jwplayer(site_url(config_item('uploads_dir') . '/post/' . element('pfi_filename', $value)), $image_width);
-                            }
+                        $value['download_link'] = site_url('postact/download/' . element('pfi_id', $value),'',element('file_storage', $value));
+                        $view['view']['file_download'][] = $value;
+                        if (element('use_autoplay', $board) && in_array(element('pfi_type', $value), $play_extension)) {
+                            $file_player .= $this->videoplayer->get_jwplayer(site_url(config_item('uploads_dir') . '/post/' . element('pfi_filename', $value),'',element('file_storage', $value)), $image_width);
                         }
                     }
+                    
                 }
             }
             
@@ -1195,37 +1181,23 @@ class Board_post extends CB_Controller
                 $result['list'][$key]['origin_image_url'] = '';
 
                 if (element('use_gallery_list', $board)) {
-                    if($this->use_file_storage === "S3"){
-                        if (element('post_image', $val)) {
-                            
-                            $filewhere = array(
-                                'post_id' => element('post_id', $val),
-                                'pfi_is_image' => 1,
-                            );
-                            $file = $this->Post_file_model
-                                ->get_one('', '', $filewhere, '', '', 'pfi_id', 'ASC');
-                            $result['list'][$key]['origin_image_url'] = $this->config->config['s3_url'] .config_item('uploads_dir'). '/post/' . element('pfi_filename', $file); 
-                        } 
+                    if (element('post_image', $val)) {
+                        $filewhere = array(
+                            'post_id' => element('post_id', $val),
+                            'pfi_is_image' => 1,
+                        );
+                        $file = $this->Post_file_model
+                            ->get_one('', '', $filewhere, '', '', 'pfi_id', 'DESC');
+                        $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file), element('file_storage', $file),$gallery_image_width, $gallery_image_height);
+                        $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $file),element('file_storage', $file));
                     } else {
-                        if (element('post_image', $val)) {
-                            $filewhere = array(
-                                'post_id' => element('post_id', $val),
-                                'pfi_is_image' => 1,
-                            );
-                            $file = $this->Post_file_model
-                                ->get_one('', '', $filewhere, '', '', 'pfi_id', 'ASC');
-                            $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file), $gallery_image_width, $gallery_image_height);
-                            $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $file));
-                        } else {
-                            $thumb_url = get_post_image_url(element('post_content', $val), $gallery_image_width, $gallery_image_height);
-                            $result['list'][$key]['thumb_url'] = $thumb_url
-                                ? $thumb_url
-                                : thumb_url('', '', $gallery_image_width, $gallery_image_height);
+                        $thumb_url = get_post_image_url(element('post_content', $val),'', $gallery_image_width, $gallery_image_height);
+                        $result['list'][$key]['thumb_url'] = $thumb_url
+                            ? $thumb_url
+                            : thumb_url('', '', '',$gallery_image_width, $gallery_image_height);
 
-                            $result['list'][$key]['origin_image_url'] = $thumb_url;
-                        }
+                        $result['list'][$key]['origin_image_url'] = $thumb_url;
                     }
-                    
                 }
 
                 $result['list'][$key]['pln_url'] =  array();
@@ -1239,12 +1211,22 @@ class Board_post extends CB_Controller
                         ->get('', '', $linkwhere, '2', '', 'pln_id', 'ASC');
                     if ($link && is_array($link)) {
                         foreach ($link as $key_ => $value_) {
-                            $result['list'][$key]['pln_url'][$key_] = $value_['pln_url'];
+                             if(element('use_autoplay', $board) && $key_===1){
+                                 $result['list'][$key]['pln_url'][$key_] = $this->videoplayer->get_video(prep_url(element('pln_url', $value_)),'100%','100%');
+                             } else {
+                                $result['list'][$key]['pln_url'][$key_] = $value_['pln_url'];
+                                
+                            }
+                            
+                                
                         }
                     }
                 }
             }
         }
+
+        
+
 
         $return['data'] = $result;
         $return['notice_list'] = $noticeresult;

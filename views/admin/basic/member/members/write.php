@@ -110,7 +110,7 @@
                         <?php
                         if (element('mem_photo', element('data', $view))) {
                         ?>
-                            <img src="<?php echo member_photo_url(element('mem_photo', element('data', $view))); ?>" alt="회원 사진" title="회원 사진" />
+                            <img src="<?php echo member_photo_url(element('mem_photo', element('data', $view)),element('file_storage', element('data', $view))); ?>" alt="회원 사진" title="회원 사진" />
                             <label for="mem_photo_del">
                                 <input type="checkbox" name="mem_photo_del" id="mem_photo_del" value="1" <?php echo set_checkbox('mem_photo_del', '1'); ?> /> 삭제
                             </label>
@@ -127,7 +127,7 @@
                         <?php
                         if (element('mem_icon', element('data', $view))) {
                         ?>
-                            <img src="<?php echo member_icon_url(element('mem_icon', element('data', $view))); ?>" alt="회원 아이콘" title="회원 아이콘" />
+                            <img src="<?php echo member_icon_url(element('mem_icon', element('data', $view)),element('file_storage', element('data', $view))); ?>" alt="회원 아이콘" title="회원 아이콘" />
                             <label for="mem_icon_del">
                                 <input type="checkbox" name="mem_icon_del" id="mem_icon_del" value="1" <?php echo set_checkbox('mem_icon_del', '1'); ?> /> 삭제
                             </label>

@@ -437,7 +437,7 @@ if ( ! function_exists('display_username')) {
  * 회원 사진 가져오기
  */
 if ( ! function_exists('member_photo_url')) {
-    function member_photo_url($img = '', $width = '', $height = '')
+    function member_photo_url($img = '', $file_storage = '',$width = '', $height = '')
     {
         $CI = & get_instance();
         if (empty($img)) {
@@ -446,7 +446,7 @@ if ( ! function_exists('member_photo_url')) {
         is_numeric($width) OR $width = $CI->cbconfig->item('member_photo_width');
         is_numeric($height) OR $height = $CI->cbconfig->item('member_photo_height');
 
-        return thumb_url('member_photo', $img, $width, $height);
+        return thumb_url('member_photo', $img, $file_storage, $width, $height);
     }
 }
 
@@ -455,7 +455,7 @@ if ( ! function_exists('member_photo_url')) {
  * 회원 아이콘 가져오기
  */
 if ( ! function_exists('member_icon_url')) {
-    function member_icon_url($img = '', $width = '', $height = '')
+    function member_icon_url($img = '',$file_storage = '', $width = '', $height = '')
     {
         $CI = & get_instance();
         if (empty($img)) {
@@ -464,7 +464,7 @@ if ( ! function_exists('member_icon_url')) {
         is_numeric($width) OR $width = $CI->cbconfig->item('member_icon_width');
         is_numeric($height) OR $height = $CI->cbconfig->item('member_icon_height');
 
-        return thumb_url('member_icon', $img, $width, $height);
+        return thumb_url('member_icon', $img,$file_storage, $width, $height);
     }
 }
 
@@ -473,7 +473,7 @@ if ( ! function_exists('member_icon_url')) {
  * 배너 이미지 가져오기
  */
 if ( ! function_exists('banner_image_url')) {
-    function banner_image_url($img = '', $width = '', $height = '')
+    function banner_image_url($img = '',$file_storage = '', $width = '', $height = '')
     {
         if (empty($img)) {
             return false;
@@ -481,7 +481,7 @@ if ( ! function_exists('banner_image_url')) {
         is_numeric($width) OR $width = '';
         is_numeric($height) OR $height = '';
 
-        return thumb_url('banner', $img, $width, $height);
+        return thumb_url('banner', $img,$file_storage, $width, $height);
     }
 }
 
@@ -552,6 +552,7 @@ if ( ! function_exists('banner')) {
                         . thumb_url(
                             'banner',
                             element('ban_image', $val),
+                            element('file_storage', $val),
                             element('ban_width', $val),
                             element('ban_height', $val)
                         )
@@ -888,7 +889,7 @@ if ( ! function_exists('get_google_map')) {
  * 게시글보기 썸네일 생성
  */
 if ( ! function_exists('get_view_thumbnail')) {
-    function get_view_thumbnail($contents = '', $thumb_width= 0)
+    function get_view_thumbnail($contents = '', $thumb_width= 0, $file_storage = NUll)
     {
         if (empty($contents)) {
             return false;
@@ -934,7 +935,7 @@ if ( ! function_exists('get_view_thumbnail')) {
             $p = parse_url($src);
             if (isset($p['host']) && $p['host'] === $CI->input->server('HTTP_HOST')
                 && strpos($p['path'], '/' . config_item('uploads_dir') . '/editor/') !== false) {
-                $thumb_tag = '<img src="' . thumb_url('editor', str_replace(site_url(config_item('uploads_dir') . '/editor') . '/', '', $src), $thumb_width) . '" ';
+                $thumb_tag = '<img src="' . thumb_url('editor', str_replace(site_url(config_item('uploads_dir') . '/editor','',$file_storage) . '/',$file_storage, '', $src), $thumb_width) . '" ';
             } else {
                 $thumb_tag = '<img src="' . $src . '" ';
             }
@@ -963,7 +964,7 @@ if ( ! function_exists('get_view_thumbnail')) {
  * 에디터 이미지 1개 url 얻기
  */
 if ( ! function_exists('get_post_image_url')) {
-    function get_post_image_url($contents = '', $thumb_width = '', $thumb_height = '')
+    function get_post_image_url($contents = '', $file_storage = '',$thumb_width = '', $thumb_height = '')
     {
         $CI = & get_instance();
 
@@ -989,7 +990,8 @@ if ( ! function_exists('get_post_image_url')) {
             && strpos($p['path'], '/' . config_item('uploads_dir') . '/editor/') !== false) {
             $src = thumb_url(
                 'editor',
-                str_replace(site_url(config_item('uploads_dir') . '/editor') . '/', '', $src),
+                str_replace(site_url(config_item('uploads_dir') . '/editor','',$file_storage) . '/', '', $src),
+                $file_storage,
                 $thumb_width,
                 $thumb_height
             );

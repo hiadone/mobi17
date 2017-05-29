@@ -18,7 +18,7 @@ if (element('board_list', $view)) {
         $config = array(
             'skin' => 'mobile_mugic',
             'brd_id' => element('brd_id', $board),
-            'limit' => 21,
+            'limit' => element('list_count', $board),
             'length' => 25,
             'is_gallery' => '',
             'image_width' => '',

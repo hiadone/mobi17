@@ -3,11 +3,11 @@ $url = parse_url(urldecode($_GET['url']));
 
 if($_GET['filename']) $filename=$_GET['filename'].'jpg';
 else $filename='photo.jpg';
-header('Content-Type: image/png');
-header("Content-Disposition: inline;filename='".$filename."'");
-header("referrer: no-referrer");
-header("Pragma: no-cache");
-header("Expires: 0");
+// header('Content-Type: image/png');
+// header("Content-Disposition: inline;filename='".$filename."'");
+// // header("referer: ".$url['protocol'].$url['host'].$url['path']);
+// header("Pragma: no-cache");
+// header("Expires: 0");
 
 $ctx = stream_context_create(array(   
    'http' => array(   

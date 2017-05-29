@@ -20,7 +20,7 @@ if (element('board_list', $view)) {
 
         if(strpos(element('brd_key', $board),'ebook_1') !== false) {
             $limit=5;
-            $css='imglist';
+            $css='imglist ebook';
             
         }
 

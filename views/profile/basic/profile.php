@@ -7,7 +7,7 @@
         <?php
         if ($this->cbconfig->item('use_member_photo') && element('mem_photo', element('member', $view))) {
         ?>
-            <img src="<?php echo member_photo_url(element('mem_photo', element('member', $view))); ?>" width="64" height="64" class="media-object" alt="<?php echo html_escape(element('mem_nickname', element('member', $view))); ?> 님의 사진" title="<?php echo html_escape(element('mem_nickname', element('member', $view))); ?> 님의 사진" />
+            <img src="<?php echo member_photo_url(element('mem_photo', element('member', $view)),element('file_storage', element('member', $view))); ?>" width="64" height="64" class="media-object" alt="<?php echo html_escape(element('mem_nickname', element('member', $view))); ?> 님의 사진" title="<?php echo html_escape(element('mem_nickname', element('member', $view))); ?> 님의 사진" />
         <?php
         } else {
         ?>

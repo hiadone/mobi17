@@ -106,7 +106,7 @@ class Banner extends CB_Controller
             foreach (element('list', $result) as $key => $val) {
                 
                 if (element('ban_image', $val)) {
-                    $result['list'][$key]['thumb_url'] = thumb_url('banner', element('ban_image', $val), '80');
+                    $result['list'][$key]['thumb_url'] = thumb_url('banner', element('ban_image', $val),element('file_storage', $val), '80');
                 }
                 if (empty($val['ban_start_date']) OR $val['ban_start_date'] === '0000-00-00') {
                     $result['list'][$key]['ban_start_date'] = '미지정';
@@ -391,6 +391,7 @@ class Banner extends CB_Controller
                 'ban_height' => $ban_height,
                 'ban_order' => $ban_order,
                 'ban_activated' => $ban_activated,
+                'file_storage' => config_item('use_file_storage'),
             );
             if ($this->input->post('ban_image_del')) {
                 $updatedata['ban_image'] = '';
@@ -399,7 +400,12 @@ class Banner extends CB_Controller
             }
             if (element('ban_image', $getdata) && ($this->input->post('ban_image_del') OR $updatephoto)) {
                 // 기존 파일 삭제
-                @unlink(config_item('uploads_dir') . '/banner/' . element('ban_image', $getdata));
+
+                if(element('file_storage', $getdata) === 'S3')
+                    $this->aws->deleteObject(config_item('uploads_dir') . '/banner/'. element('ban_image', $getdata));
+                else
+                    @unlink(config_item('uploads_dir') . '/banner/' . element('ban_image', $getdata));
+                
             }
 
             /**

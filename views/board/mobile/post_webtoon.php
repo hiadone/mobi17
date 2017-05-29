@@ -67,9 +67,26 @@ foreach (element(0, $menu) as $mkey => $mval) {
 <div class="textarea">
 <div id="post-content"><?php echo element('content', element('post', $view)); ?></div>
 
-
-
-<?php if (element('link_count', $view) > 0) { ?>
+<?php if (element('file_count', $view) > 0) { ?>
+        <div class="table-box">
+                <?php                
+                if (element('file_count', $view) > 0) {
+                    $i=0;
+                    foreach (element('file_image', $view) as $key => $value) {
+                        
+                ?>
+                    <div>
+                        <img src="<?php echo element('thumb_image_url', $value); ?>" alt="<?php echo html_escape(element('pfi_originname', $value)); ?>" title="<?php echo html_escape(element('pfi_originname', $value)); ?>" class="view_full_image" data-origin-image-url="<?php echo element('origin_image_url', $value); ?>" style="max-width:100%;" />
+                    </div>
+                <?php
+                    $i++;
+                    }
+                }
+                ?>
+                
+        </div>
+    <?php
+        } else if (element('link_count', $view) > 0) { ?>
         <div class="table-box">
                 <?php                
                 if (element('link_count', $view) > 0) {

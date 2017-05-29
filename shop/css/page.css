@@ -1,0 +1,71 @@
+@charset "utf-8";
+/* page */
+
+  .wrap{
+    max-width:420px;
+    min-width: 320px;
+    margin:0 auto;
+  }
+
+  /*main_menu 영역*/
+
+  .main_menu{
+    width: 80%;
+    margin:0 auto 10%;
+  }
+
+  .main_menu ul , .main_menu nav{
+    width: 100%;
+    display: inline-block;
+  }
+
+  .main_menu li{
+    width: 52%;
+    float: left;
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Nanum Gothic', sans-serif;
+  }
+
+  .main_menu li:first-child{
+    width:48%;
+    border-right:1px solid #000;
+    box-sizing: border-box;
+  }
+
+  /*sale 배너 영역*/
+
+  .sale{
+      margin-bottom:10%;
+  }
+
+  /*photo01 영역*/
+  .photo01 figure{
+    position: relative;
+  }
+
+  .photo01 figcaption{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    text-align: center;
+    padding:16.5% 0;
+    box-sizing: border-box;
+  }
+  .photo01 h2{
+    font-family: 'Poiret One', cursive;
+    text-align: center;
+    color:#fff;
+    font-size: 18px;
+    text-shadow: 1px 1px 1px #000;
+  }
+
+  .photo01 h2 span{
+    font-size: 12px;
+  }
+
+  .photo02 figcaption{
+    padding:18.5% 0;
+  }

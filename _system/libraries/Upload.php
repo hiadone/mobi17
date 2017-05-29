@@ -401,7 +401,7 @@ class CI_Upload {
             return FALSE;
         }
 
-        if(config_item('use_file_storage') !== 'S3' || $field!=='userfile'){
+        if(config_item('use_file_storage') !== 'S3' ){
             // Is the upload path valid?
             if ( ! $this->validate_upload_path())
             {
@@ -567,7 +567,7 @@ class CI_Upload {
          */
         
 
-        if(config_item('use_file_storage') === "S3" && $field==='userfile'){
+        if(config_item('use_file_storage') === "S3" ){
              
             $this->_CI->aws->putObject($this->upload_path.$this->file_name,$this->file_temp);
 

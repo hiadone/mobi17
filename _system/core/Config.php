@@ -239,54 +239,62 @@ class CI_Config {
 	 * @param	string	$protocol
 	 * @return	string
 	 */
-	public function site_url($uri = '', $protocol = NULL)
-	{
-		$base_url = $this->slash_item('base_url');
+	public function site_url($uri = '', $protocol = NULL, $file_storage = NULL)
+	{	
+		
+		if($file_storage ==='S3'){
+		
+			$base_url = $this->slash_item('s3_url');
+			return $base_url.$uri;
+		} else {
+			$base_url = $this->slash_item('base_url');
 
-		if (isset($protocol))
-		{
-			// For protocol-relative links
-			if ($protocol === '')
+			if (isset($protocol))
 			{
-				$base_url = substr($base_url, strpos($base_url, '//'));
-			}
-			else
-			{
-				$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
-			}
-		}
-
-		if (empty($uri))
-		{
-			return $base_url.$this->item('index_page');
-		}
-
-		$uri = $this->_uri_string($uri);
-
-		if ($this->item('enable_query_strings') === FALSE)
-		{
-			$suffix = isset($this->config['url_suffix']) ? $this->config['url_suffix'] : '';
-
-			if ($suffix !== '')
-			{
-				if (($offset = strpos($uri, '?')) !== FALSE)
+				// For protocol-relative links
+				if ($protocol === '')
 				{
-					$uri = substr($uri, 0, $offset).$suffix.substr($uri, $offset);
+					$base_url = substr($base_url, strpos($base_url, '//'));
 				}
 				else
 				{
-					$uri .= $suffix;
+					$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
 				}
 			}
 
-			return $base_url.$this->slash_item('index_page').$uri;
-		}
-		elseif (strpos($uri, '?') === FALSE)
-		{
-			$uri = '?'.$uri;
-		}
+			if (empty($uri))
+			{
+				return $base_url.$this->item('index_page');
+			}
 
-		return $base_url.$this->item('index_page').$uri;
+			$uri = $this->_uri_string($uri);
+
+			if ($this->item('enable_query_strings') === FALSE)
+			{
+				$suffix = isset($this->config['url_suffix']) ? $this->config['url_suffix'] : '';
+
+				if ($suffix !== '')
+				{
+					if (($offset = strpos($uri, '?')) !== FALSE)
+					{
+						$uri = substr($uri, 0, $offset).$suffix.substr($uri, $offset);
+					}
+					else
+					{
+						$uri .= $suffix;
+					}
+				}
+
+				return $base_url.$this->slash_item('index_page').$uri;
+			}
+			elseif (strpos($uri, '?') === FALSE)
+			{
+				$uri = '?'.$uri;
+			}
+
+			return $base_url.$this->item('index_page').$uri;
+		}
+		
 	}
 
 	// -------------------------------------------------------------

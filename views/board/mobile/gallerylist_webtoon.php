@@ -245,7 +245,15 @@ $(document).ready(function() {
         ?>
                 <li>
                     <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
-                    <a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $result)); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element(0,element('pln_url', $result)); ?>" alt="<?php echo 'webtoon'.$i ?>" title="<?php echo 'webtoon_'.$i ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3><?php echo element('bca_value',element('category', $result)) ? html_escape(element('bca_value',element('category', $result))) :'';?></h3></a>
+                    <a href="<?php echo board_url(element('brd_key', element('board', element('list', $view)))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $result)); ?>" title="<?php echo html_escape(element('title', $result)); ?>">
+                    <?php 
+                    if(element('origin_image_url', $result)){
+                        echo '<img src="'.html_escape(element('thumb_url', $result)).'" alt="webtoon_'.$i.'">';
+                    } elseif (element(0,element('pln_url', $result))) { 
+                        echo '<img src="'.html_escape(element(0,element('pln_url', $result))).'" class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-urltype="'.element(0,element('pln_url', $result)).'" data-url="/img_url_header.php?url='.urlencode(element(0,element('pln_url', $result))).'&filename=webtoon_'.$i.'" alt="webtoon_'.$i.'">';
+                    }
+                    ?>
+                    <h3><?php echo element('bca_value',element('category', $result)) ? html_escape(element('bca_value',element('category', $result))) :'';?></h3></a>
                 </li>
             <?php 
             $i++;
@@ -256,14 +264,21 @@ $(document).ready(function() {
         if (element('list', element('data', element('list', $view)))) {
         echo '<ul>';
             foreach (element('list', element('data', element('list', $view))) as $result) {
-        
 
         ?>
                 <li>
                 
                     <?php if (element('is_admin', $view)) { ?><input type="checkbox" name="chk_post_id[]" value="<?php echo element('post_id', $result); ?>" /><?php } ?>
                     
-                    <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>"><img src="<?php echo element(0,element('pln_url', $result)); ?>" alt="<?php echo 'webtoon'.$i ?>" title="<?php echo 'webtoon_'.$i ?>"  class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url=<?php echo urlencode(element(0,element('pln_url', $result)))?>&filename=<?php echo 'photo_'.$i ?>"><h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></a>
+                    <a href="<?php echo element('post_url', $result); ?>" title="<?php echo html_escape(element('title', $result)); ?>">
+                    <?php 
+                    if(element('origin_image_url', $result)){
+                        echo '<img src="'.html_escape(element('thumb_url', $result)).'" alt="webtoon_'.$i.'">';
+                    } elseif (element(0,element('pln_url', $result))) { 
+                        echo '<img src="'.html_escape(element(0,element('pln_url', $result))).'" class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-urltype="'.element(0,element('pln_url', $result)).'" data-url="/img_url_header.php?url='.urlencode(element(0,element('pln_url', $result))).'&filename=webtoon_'.$i.'" alt="webtoon_'.$i.'">';
+                    }
+                    ?>
+                    <h3> <?php echo element('title', $result) ? html_escape(element('title', $result)) :'';?></a>
               
                     
                 </li>

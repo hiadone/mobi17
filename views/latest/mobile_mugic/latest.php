@@ -17,7 +17,7 @@
                     
       
             ?>
-                <li><a href="<?php echo element('url', $value); ?>" title="<?php echo html_escape(element('title', $value)); ?>">
+                <li><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>?<?php if(!empty($this->input->get('findex'))) echo 'findex='.html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $value)); ?>" title="<?php echo html_escape(element('bca_value',element('category', $value))); ?>">
                     <?php 
                     if(element('pfi_url', $value)){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="mugic_'.$i.'">';
@@ -34,6 +34,7 @@
                     $i++;
                 }
             }
+            /*
             while ($i < element('latest_limit', $view)) {
             ?>
                 <li>
@@ -43,6 +44,7 @@
             <?php
                 $i++;
             }
+            */
             ?>
        </ul>
    

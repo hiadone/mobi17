@@ -1,7 +1,7 @@
 <?php 
 
 $bestComment=['일본','동양','동양','일본','일본'];
-if(element('css', $view) =='imglist'){
+if(strpos(element('brd_key', element('board', $view)),'video_1') !== false){
    // print_r(element('latest', $view));
     $i=1;
     if (element('latest', $view)) {
@@ -22,7 +22,7 @@ if(element('css', $view) =='imglist'){
         else {
             echo '<h2>';
             echo html_escape(element('board_name', element('board', $view)));
-            if(element('css', $view) =='swip_menu'){
+            if(strpos(element('brd_key', element('board', $view)),'video_1') === false && strpos(element('brd_key', element('board', $view)),'video_7') === false){
                 echo '<span><a href="'.board_url(element('brd_key', element('board', $view))).'" title="'.html_escape(element('board_name', element('board', $view))).'">더보기 ></a></span>';
             }         
             echo '</h2>';
@@ -37,14 +37,14 @@ if(element('css', $view) =='imglist'){
                     //print_r($value);
 
 
-                if($key==0 && element('css', $view) =='imglist') continue;
+                if($key==0 && strpos(element('brd_key', element('board', $view)),'video_1') !== false) continue;
             ?>
                 <li><a href="<?php echo element(element('href_url', $view), $value); ?>" title="<?php echo html_escape(element('title', $value)); ?>">
                     <?php 
                     if(element('pfi_url', $value) && element('css', $view) !='novel'){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="photo_'.$i.'">';
                     } elseif (element('pln_url', $value)&& element('css', $view) !='novel') { 
-                        echo '<img src="'.html_escape(element('pln_url', $value)).'" alt="photo_'.$i.'">';
+                        echo '<img src="'.html_escape(element('pln_url', $value)).'" title="photo_"'.$i.' class="imgUrlExist" onerror="imgUrlChangeTry(this)" data-url="/img_url_header.php?url='.urlencode(element(0,element('pln_url', $value))).'&filename=photo_'.$i.'">';
                     }
                     ?>
                     

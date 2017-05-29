@@ -32,7 +32,7 @@ if(element('css', $view) =='imglist'){
 
                 if($key==0 && element('css', $view) =='imglist') continue;
             ?>
-                <li><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>?findex=<?php echo html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $value)); ?>" title="<?php echo html_escape(element('bca_value',element('category', $value))); ?>">
+                <li><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>?<?php if(!empty($this->input->get('findex'))) echo 'findex='.html_escape($this->input->get('findex')); ?>&category_id=<?php echo element('bca_key', element('category', $value)); ?>" title="<?php echo html_escape(element('bca_value',element('category', $value))); ?>">
                     <?php 
                     if(element('pfi_url', $value) && element('css', $view) !='novel'){
                         echo '<img src="'.html_escape(element('pfi_url', $value)).'" alt="webtoon_'.$i.'">';

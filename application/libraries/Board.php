@@ -233,7 +233,7 @@ class Board extends CI_Controller
         $postfiles = $this->CI->Post_file_model->get('', '', $deletewhere);
         if ($postfiles) {
             foreach ($postfiles as $postfile) {
-                if(element('file_storage',$postfile)=="S3")
+                if(element('file_storage',$postfile)==="S3")
                     $this->CI->aws->deleteObject(config_item('uploads_dir') . '/post/'.$postfile['pfi_filename']);
                 else @unlink(config_item('uploads_dir') .  '/post/' . element('pfi_filename', $postfile));
             }
@@ -586,6 +586,7 @@ class Board extends CI_Controller
             $forder = (strtoupper($forder) === 'ASC') ? 'ASC' : 'DESC';
             $this->CI->db->order_by($findex, $forder);
         }
+        
         if (is_numeric($limit)) {
             $this->CI->db->limit($limit);
         }
@@ -596,7 +597,7 @@ class Board extends CI_Controller
             'brd_id' => $brd_id,
             'pln_url !=' =>'' ,
         );
-        $post_link_array  = $this->CI->Post_link_model->get('', '', $linkwhere, '', '', 'pln_id', 'DESC');
+        $post_link_array  = $this->CI->Post_link_model->get('', '', $linkwhere, 2, '', 'pln_id', 'ASC');
         $pln_url="";
         
 
@@ -606,7 +607,7 @@ class Board extends CI_Controller
         
 
         foreach ($post_link_array as $key => $value) {
-                $pln_url[element('post_id', $value)] = element('pln_url', $value);                
+                $pln_url[element('post_id', $value)][] = element('pln_url', $value);                
         }
       
                 
@@ -618,7 +619,7 @@ class Board extends CI_Controller
             'brd_id' => $brd_id,
             'pfi_filename !=' =>'' ,
         );
-        $post_file_array  = $this->CI->Post_file_model->get('', '', $linkwhere, '', '', 'pfi_id', 'ASC');
+        $post_file_array  = $this->CI->Post_file_model->get('', '', $linkwhere, 1, '', 'pfi_id', 'DESC');
         $pfi_url="";
         foreach ($post_file_array as $key => $value) {
                 $pfi_url[element('post_id', $value)] = element('pfi_filename', $value);
@@ -641,10 +642,10 @@ class Board extends CI_Controller
                 $view['view']['latest'][$key]['url'] = post_url($brd_key, element('post_id', $value));
                 $view['view']['latest'][$key]['title'] = $length ? cut_str(element('post_title', $value), $length) : element('post_title', $value);
 
-                if(isset($pln_url[element('post_id', $value)])) $view['view']['latest'][$key]['pln_url'] = $pln_url[element('post_id', $value)];
+                if(isset($pln_url[element('post_id', $value)][0])) $view['view']['latest'][$key]['pln_url'] = $pln_url[element('post_id', $value)][0];
 
-                if($key <1 && element('use_autoplay', $view['view']['board']) && element('brd_key', $view['view']['board'])=='video_1' ){                    
-                    if(isset($pln_url[element('post_id', $value)])) $view['view']['latest'][$key]['link_player'] = $this->CI->videoplayer->get_video(prep_url($pln_url[element('post_id', $value)]));
+                if(element('use_autoplay', $view['view']['board'])){
+                    if(isset($pln_url[element('post_id', $value)][1])) $view['view']['latest'][$key]['link_player'] = $this->CI->videoplayer->get_video(prep_url($pln_url[element('post_id', $value)][1]),'100%','100%');
                 }
                 
                 if(isset($pfi_url[element('post_id', $value)])) $view['view']['latest'][$key]['pfi_url'] = $this->CI->config->config['s3_url'] .config_item('uploads_dir'). '/post/' .$pfi_url[element('post_id', $value)];
@@ -663,11 +664,11 @@ class Board extends CI_Controller
                         );
                         $file = $this->CI->Post_file_model->get_one('', '', $imagewhere, '', '', 'pfi_id', 'ASC');
                         if (element('pfi_filename', $file)) {
-                            $view['view']['latest'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file), $image_width, $image_height);
+                            $view['view']['latest'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file),element('file_storage', $file), $image_width, $image_height);
                         }
                     } else {
-                        $thumb_url = get_post_image_url(element('post_content', $value), $image_width, $image_height);
-                        $view['view']['latest'][$key]['thumb_url'] = $thumb_url ? $thumb_url : thumb_url('', '', $image_width, $image_height);
+                        $thumb_url = get_post_image_url(element('post_content', $value), '',$image_width, $image_height);
+                        $view['view']['latest'][$key]['thumb_url'] = $thumb_url ? $thumb_url : thumb_url('', '', '', $image_width, $image_height);
                     }
                 }
             }

@@ -1416,7 +1416,12 @@ class Layoutskin extends CB_Controller
                 $savedata['site_favicon'] = '';
             }
             if ($site_favicon OR $this->input->post('site_favicon_del')) {
-                @unlink(config_item('uploads_dir') . '/favicon/' . $this->cbconfig->item('site_favicon'));
+                if(config_item('use_file_storage')==='S3')
+                    $this->aws->deleteObject(config_item('uploads_dir') . '/favicon/'. $this->cbconfig->item('site_favicon'));
+                else 
+                    @unlink(config_item('uploads_dir') . '/favicon/' . $this->cbconfig->item('site_favicon'));
+                
+                
             }
 
 

@@ -665,10 +665,10 @@ $config['ciboard_check_latest_version'] = 'http://api.ciboard.co.kr/version/chec
 
 
 //Aws S3 서비스 설정
-$config['use_file_storage']    = 'network';
+$config['use_file_storage']    = 'S3';
 $config['s3Key']    = 'AKIAICCUJI6ATI63YTCA';
 $config['s3Secret'] = '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';
 $config['version']  = 'latest';
 $config['region']   = 'ap-northeast-1';
-$config['bucket']   = 'mobipopcon';
+$config['bucket']   = 'filebogo';
 $config['s3_url']   = 'https://s3-'.$config['region'].'.amazonaws.com/'.$config['bucket'].'/';

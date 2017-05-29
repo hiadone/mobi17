@@ -49,7 +49,7 @@
                     <span>프로필사진</span>
                     <div class="form-text text-primary group">
                         <?php if ($this->member->item('mem_photo')) { ?>
-                            <img src="<?php echo member_photo_url($this->member->item('mem_photo')); ?>" alt="프로필사진" title="프로필사진" />
+                            <img src="<?php echo member_photo_url($this->member->item('mem_photo'),$this->member->item('file_storage')); ?>" alt="프로필사진" title="프로필사진" />
                             <label for="mem_photo_del">
                                 <input type="checkbox" name="mem_photo_del" id="mem_photo_del" value="1" <?php echo set_checkbox('mem_photo_del', '1'); ?> />
                                 삭제
@@ -65,7 +65,7 @@
                     <span>회원아이콘</span>
                     <div class="form-text text-primary group">
                         <?php if ($this->member->item('mem_icon')) { ?>
-                            <img src="<?php echo member_icon_url($this->member->item('mem_icon')); ?>" alt="회원아이콘" title="회원아이콘" />
+                            <img src="<?php echo member_icon_url($this->member->item('mem_icon'),$this->member->item('file_storage')); ?>" alt="회원아이콘" title="회원아이콘" />
                             <label for="mem_icon_del">
                                 <input type="checkbox" name="mem_icon_del" id="mem_icon_del" value="1" <?php echo set_checkbox('mem_icon_del', '1'); ?> />
                                 삭제

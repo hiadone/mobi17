@@ -29,8 +29,8 @@ $i=1;
 if (element('board_list', $view)) {
     foreach (element('board_list', $view) as $key => $board) {
         
-        $limit=5;
-        $css='swip_menu';
+        $limit=4;
+        $css='imglist';
         $href_url='url';
 
         if(strpos(element('brd_key', $board),'video_1') !== false) {

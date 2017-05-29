@@ -111,8 +111,8 @@ class Trash extends CB_Controller
                     );
                     $file = $this->Post_file_model->get_one('', '', $filewhere, '', '', 'pfi_id', 'ASC');
                     if (element('pfi_filename', $file)) {
-                        $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $file));
-                        $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file), '80');
+                        $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $file),element('file_storage', $file));
+                        $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $file),element('file_storage', $file), '80');
                     }
                 }
             }

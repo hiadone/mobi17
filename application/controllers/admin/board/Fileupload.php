@@ -105,8 +105,8 @@ class Fileupload extends CB_Controller
                 $result['list'][$key]['posturl'] = post_url($brd_key, element('post_id', $val));
                 $result['list'][$key]['download_link'] = admin_url($this->pagedir . '/download/' . element('pfi_id', $val));
                 if (element('pfi_is_image', $val)) {
-                    $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $val));
-                    $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $val), '80');
+                    $result['list'][$key]['origin_image_url'] = thumb_url('post', element('pfi_filename', $val),element('file_storage', $val));
+                    $result['list'][$key]['thumb_url'] = thumb_url('post', element('pfi_filename', $val),element('file_storage', $val), '80');
                 }
                 $result['list'][$key]['board'] = $board = $this->board->item_all(element('brd_id', $val));
                 if ($board) {
@@ -308,6 +308,12 @@ class Fileupload extends CB_Controller
         if ($this->input->post('chk') && is_array($this->input->post('chk'))) {
             foreach ($this->input->post('chk') as $val) {
                 if ($val) {
+
+                    $oldpostfile = $this->{$this->modelname}->get_one($val);
+                    if(element('file_storage',$oldpostfile)==="S3")
+                        $this->aws->deleteObject(config_item('uploads_dir') . '/post/'.$oldpostfile['pfi_filename']);
+                    else @unlink(config_item('uploads_dir') .  '/post/' . element('pfi_filename', $oldpostfile));
+                        
                     $this->{$this->modelname}->delete($val);
                 }
             }
