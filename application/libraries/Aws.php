@@ -110,6 +110,7 @@ class Aws extends CI_Controller
                 'Bucket' => $this->bucket,
                 'Key'    => $key
             ]);
+            echo $deleteObject;
         } catch(S3Exception $e){
            echo ($e);
         }

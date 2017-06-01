@@ -562,6 +562,16 @@ class Banner extends CB_Controller
                     $getdata = $this->{$this->modelname}->get_one($val);
                     $this->cache->delete('banner/banner-' . element('bng_name', $getdata) . '-random-' . cdate('Y-m-d'));
                     $this->cache->delete('banner/banner-' . element('bng_name', $getdata) . '-order-' . cdate('Y-m-d'));
+
+                    if (element('ban_image', $getdata)) {
+                        // 기존 파일 삭제
+                        if(element('file_storage', $getdata) === 'S3')
+                            $this->aws->deleteObject(config_item('uploads_dir') . '/banner/'. element('ban_image', $getdata));
+                        else
+                            @unlink(config_item('uploads_dir') . '/banner/' . element('ban_image', $getdata));
+                    }
+
+
                     $this->{$this->modelname}->delete($val);
                 }
             }
