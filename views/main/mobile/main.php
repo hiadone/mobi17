@@ -16,7 +16,7 @@ $(document).ready(function() {
             return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
         }
     });
-    $('section.slide ul li').css('display','block');
+   // $('section.slide ul li').css('display','block');
     $('.slide ul').bxSlider({
         //work method
         mode: 'horizontal', // 'horizontal' : 좌,우 'vertical' : 상,하 'fade' : fade in, out
@@ -56,20 +56,22 @@ $(document).ready(function() {
         infiniteLoop: true,//마지막에 도달 했을시, 첫페이지로 갈 것인가 멈출것인가
 
         onSliderLoad: function(){
-
+            $('section.slide').css('visibility','visible');
           // swipedisable(document.getElementById('bxslider'));
 
         //   $(".bxslider").parent().height($(".bxslider").height());
            
          //  $(".bxslider").show();
         }
+
+
     });   
 
 });
 </script>
 
 <!-- 슬라이드 -->
-<section class="slide">
+<section class="slide" style="visibility: hidden;">
   <h4>슬라이드 영역</h4>
   <ul >
     <?php echo banner('main_bxslider_1','order',3,'<li>','</li>'); ?>

@@ -15,20 +15,22 @@ if(strpos(element('css', $view),'imglist') !== false){
 
 
 <section class="<?php echo element('css', $view)?>" id="<?php echo element('sectionId', $view)?>">
-    <h2>
-    <?php 
-        if(html_escape(element('board_name', element('board', $view)))==='전체') echo '';
-        else echo html_escape(element('board_name', element('board', $view)));
-    ?> 
     
-        <?php 
-        if(element('css', $view) =='novel'){
+    <?php 
+        if(html_escape(element('board_name', element('board', $view)))!=='전체'){
+            echo "<h2>".html_escape(element('board_name', element('board', $view)));
+
+            if(element('css', $view) =='novel'){
          ?>
         
        <span><a href="<?php echo board_url(element('brd_key', element('board', $view))); ?>" title="<?php echo html_escape(element('board_name', element('board', $view))); ?>">더보기 ></a></span> 
 
-        <?php } ?>
-    </h2>
+        <?php 
+            } 
+            echo "</h2>";
+        }
+        ?>
+    
        <?php if(element('css', $view) =='best') echo '<nav>'; ?>
             <ul>
             <?php

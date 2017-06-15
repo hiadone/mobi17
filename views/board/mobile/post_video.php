@@ -84,15 +84,10 @@ foreach (element(0, $menu) as $mkey => $mval) {
         </div>
     <?php } ?>
 
-    <div class="pull-right mt20 mb20">
-        <?php if ( ! element('post_del', element('post', $view)) && element('use_scrap', element('board', $view))) { ?>
-            <button type="button" class="btn btn-black" id="btn-scrap" onClick="post_scrap('<?php echo element('post_id', element('post', $view)); ?>', 'post-scrap');">스크랩 <span class="post-scrap"><?php echo element('scrap_count', element('post', $view)) ? '+' . number_format(element('scrap_count', element('post', $view))) : ''; ?></span></button>
-        <?php } ?>
-        <?php if ( ! element('post_del', element('post', $view)) && element('use_blame', element('board', $view)) && ( ! element('blame_blind_count', element('board', $view)) OR element('post_blame', element('post', $view)) < element('blame_blind_count', element('board', $view)))) { ?>
-            <button type="button" class="btn btn-black" id="btn-blame" onClick="post_blame('<?php echo element('post_id', element('post', $view)); ?>', 'post-blame');">신고 <span class="post-blame"><?php echo element('post_blame', element('post', $view)) ? '+' . number_format(element('post_blame', element('post', $view))) : ''; ?></span></button>
-        <?php } ?>
+    
 
         <?php if ( ! element('post_del', element('post', $view)) && element('is_admin', $view)) { ?>
+        <div class="pull-right mt20 mb20">
             <button type="button" class="btn btn-default btn-sm admin-manage-post"><i class="fa fa-cog big-fa"></i>관리</button>
             <div class="btn-admin-manage-layer admin-manage-post-layer">
                 <?php if (element('is_admin', $view) === 'super') { ?>
@@ -130,8 +125,9 @@ foreach (element(0, $menu) as $mkey => $mval) {
                 <?php } ?>
                 <div class="item" onClick="post_action('post_trash', '<?php echo element('post_id', element('post', $view)); ?>', '', '이 글을 휴지통으로 이동하시겠습니까?');"><i class="fa fa-trash"></i> 휴지통으로</div>
             </div>
+        </div>
         <?php } ?>
-    </div>
+    
 
     <?php
     if (element('use_sns_button', $view)) {
@@ -155,7 +151,7 @@ foreach (element(0, $menu) as $mkey => $mval) {
     <div class="clearfix"></div>
 
 
-    <div class="border_button mt20 mb20">
+   
         <div class="btn-group pull-left" role="group" aria-label="...">
             <?php if (element('modify_url', $view)) { ?>
                 <a href="<?php echo element('modify_url', $view); ?>" class="btn btn-default btn-sm">수정</a>
@@ -170,7 +166,7 @@ foreach (element(0, $menu) as $mkey => $mval) {
             </div>
         <?php } ?>
     </div>
-    </div>
+    
 </div>
 </section>
 <?php echo element('footercontent', element('board', $view)); ?>
